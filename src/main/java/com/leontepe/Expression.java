@@ -16,6 +16,24 @@ public class Expression {
     public String getInfix() { return this.expressionString; }
     public String getPostfix() { return infixToPostfix(this.expressionString); }
 
+    public int evaluate() {
+        Stack<Integer> valueStack = new Stack<Integer>();
+        for(char c : getPostfix().toCharArray()) {
+            if(Character.isDigit(c)) {
+                valueStack.push(Character.getNumericValue(c));
+            }
+            else if(Operator.isOperator(c)) {
+                int op2 = valueStack.pop();
+                int op1 = valueStack.pop();
+                valueStack.push(Operator.get(c).operate(op1, op2));
+            }
+            else {
+                System.out.println("Unexpected");
+            }
+        }
+        return valueStack.firstElement();
+    }
+
     // public double evaluate() {
     //     // remove whitespace
     //     String ex = expressionString.replaceAll("\\s+", "");

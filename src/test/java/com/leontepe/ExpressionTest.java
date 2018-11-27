@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 public class ExpressionTest {
+    
     /**
      * Test infix-to-postfix conversion for simple expressions (no parantheses and single digit integers).
      */
@@ -24,5 +25,11 @@ public class ExpressionTest {
         assertEquals(new Expression("9 * (5 + 2)").getPostfix(), "952+*");
         assertEquals(new Expression("3 ^ (4 / 3)").getPostfix(), "343/^");
         assertEquals(new Expression("3 * (2 / (4-3))").getPostfix(), "3243-/*");
+        assertEquals(new Expression("(8 / 3) - 3").getPostfix(), "83/3-");
+    }
+
+    @Test
+    public void testEvaluateExpressions() {
+        assertEquals(new Expression("3 - (24 / 2)").evaluate(), -9);
     }
 }
