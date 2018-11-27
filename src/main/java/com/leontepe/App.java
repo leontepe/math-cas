@@ -11,7 +11,7 @@ public class App
         // List<Double> roots = newton();
         // roots.forEach(root -> System.out.println(root));
 
-        Expression ex = new Expression("7/8 - 4*3");
+        Expression ex = new Expression("3 + (2 - 3)");
         System.out.println(ex.getPostfix());
         
     }

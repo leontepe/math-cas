@@ -6,13 +6,13 @@ import java.util.ArrayList;
 
 public class Operator {
 
-    public enum Associativity {
+    public static enum Associativity {
         LEFT, RIGHT
     }
 
-    private int precedence;
-    private Associativity associativity;
-    private char character;
+    // Parantheses are special kind of operators (in terms of the shunting-yard algorithm).
+    public static final Operator LEFT_BRACKET = new Operator('(', -1, null);
+    public static final Operator RIGHT_BRACKET = new Operator(')', -1, null);
 
     private static final List<Operator> operators = new ArrayList<Operator>() {{
         add(new Operator('+', 0, Associativity.LEFT));
@@ -20,8 +20,11 @@ public class Operator {
         add(new Operator('*', 1, Associativity.LEFT));
         add(new Operator('/', 1, Associativity.LEFT));
         add(new Operator('^', 2, Associativity.RIGHT));
-        add(new Operator('(', -1, null));
     }};
+
+    private int precedence;
+    private Associativity associativity;
+    private char character;
 
     private Operator(char character, int precedence, Associativity associativity) {
         this.character = character;
@@ -32,8 +35,6 @@ public class Operator {
     public char getCharacter() { return this.character; }
     public int getPrecedence() { return this.precedence; }
     public Associativity getAssociativity() { return this.associativity; }
-    public boolean isLeftBracket() { return this.}
-    public boolean isBracket() { return this.character == '(' || this.character == ')'; }
 
     public static Operator get(char c) {
         Operator operator = null;
@@ -47,5 +48,13 @@ public class Operator {
 
     public static boolean isOperator(char c) {
         return get(c) != null;
+    }
+
+    public static boolean isLeftBracket(char c) {
+        return c == LEFT_BRACKET.getCharacter();
+    }
+
+    public static boolean isRightBracket(char c) {
+        return c == RIGHT_BRACKET.getCharacter();
     }
 }

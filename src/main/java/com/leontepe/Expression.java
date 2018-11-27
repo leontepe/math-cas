@@ -25,7 +25,9 @@ public class Expression {
      * Shunting-yard algorithm.
      */
     public static String infixToPostfix(String infix) {
+        // Remove whitespace.
         infix = infix.replaceAll("\\s+", "");
+        
         String postfix = "";
         Stack<Operator> operatorStack = new Stack<Operator>();
 
@@ -33,7 +35,7 @@ public class Expression {
             if(Operator.isOperator(c)) {
                 Operator currentOperator = Operator.get(c);
                 while(
-                    !operatorStack.isEmpty() &&
+                    !operatorStack.isEmpty() && operatorStack.peek() != Operator.LEFT_BRACKET &&
                     (operatorStack.peek().getPrecedence() > currentOperator.getPrecedence() ||
                     (operatorStack.peek().getPrecedence() == currentOperator.getPrecedence()) &&
                         operatorStack.peek().getAssociativity() == Associativity.LEFT))
@@ -42,14 +44,19 @@ public class Expression {
                 }
                 operatorStack.push(currentOperator);
             }
+            else if(Operator.isLeftBracket(c)) {
+                operatorStack.push(Operator.LEFT_BRACKET);
+            }
+            else if(Operator.isRightBracket(c)) {
+                while(!operatorStack.isEmpty() &&
+                    operatorStack.peek() != Operator.LEFT_BRACKET) {
+                    postfix += operatorStack.pop().getCharacter();
+                }
+                // Pop left bracket from the stack.
+                operatorStack.pop().getCharacter();
+            }
             else if(Character.isDigit(c)) {
                 postfix += c;
-            }
-            else if(c == '(') {
-
-            }
-            else if(c == ')') {
-                
             }
             else {
                 System.out.println("Infix expression is invalid. Cannot parse to postfix.");
