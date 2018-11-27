@@ -30,6 +30,7 @@ public class ExpressionTest {
 
     @Test
     public void testEvaluateExpressions() {
-        assertEquals(new Expression("3 - (24 / 2)").evaluate(), -9);
+        assertEquals(new Expression("3 - (6 / 2)").evaluate(), 0);
+        assertEquals(new Expression("9 + (3 * 8)").evaluate(), 33);
     }
 }

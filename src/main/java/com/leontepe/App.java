@@ -11,7 +11,7 @@ public class App
         // List<Double> roots = newton();
         // roots.forEach(root -> System.out.println(root));
 
-        Expression ex = new Expression("4 + (10 / 2)");
+        Expression ex = new Expression("4 + (8 / 2)");
         System.out.println(ex.evaluate());
         
     }
