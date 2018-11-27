@@ -1,0 +1,30 @@
+{
+    "run": {
+        "default": "",
+        "items": [
+            {
+                "name": "math-cas",
+                "projectName": "math-cas",
+                "workingDirectory": "c:\\Users\\leont\\Documents\\Projects\\math-cas",
+                "args": [],
+                "vmargs": [],
+                "env": {},
+                "preLaunchTask": ""
+            }
+        ]
+    },
+    "debug": {
+        "default": "",
+        "items": [
+            {
+                "name": "math-cas",
+                "projectName": "math-cas",
+                "workingDirectory": "c:\\Users\\leont\\Documents\\Projects\\math-cas",
+                "args": [],
+                "vmargs": [],
+                "env": {},
+                "preLaunchTask": ""
+            }
+        ]
+    }
+}
