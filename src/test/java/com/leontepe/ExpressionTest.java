@@ -1,7 +1,6 @@
 package com.leontepe;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
@@ -32,5 +31,13 @@ public class ExpressionTest {
     public void testEvaluateExpressions() {
         assertEquals(new Expression("3 - (6 / 2)").evaluate(), 0);
         assertEquals(new Expression("9 + (3 * 8)").evaluate(), 33);
+        assertEquals(new Expression("2 + 8/3").evaluate(), 4);
+        assertEquals(new Expression("3 - 8 / 2").evaluate(), -1);
+    }
+
+    @Test
+    public void testUnaryOperatorExpressions() {
+        assertEquals(new Expression("-4+3").evaluate(), "-1");
+        assertEquals(new Expression("-(4+3)").evaluate(), "-7");
     }
 }

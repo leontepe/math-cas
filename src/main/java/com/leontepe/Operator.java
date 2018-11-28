@@ -4,15 +4,11 @@ package com.leontepe;
 import java.util.List;
 import java.util.ArrayList;
 
-public class Operator {
+public class Operator extends ExpressionElement {
 
     public static enum Associativity {
         LEFT, RIGHT
     }
-
-    // Parantheses are special kind of operators (in terms of the shunting-yard algorithm).
-    public static final Operator LEFT_BRACKET = new Operator('(', -1, null, null);
-    public static final Operator RIGHT_BRACKET = new Operator(')', -1, null, null);
 
     private static final List<Operator> operators = new ArrayList<Operator>() {{
         add(new Operator('+', 0, Associativity.LEFT, (op1, op2) -> { return op1 + op2; }));
@@ -51,13 +47,5 @@ public class Operator {
 
     public static boolean isOperator(char c) {
         return get(c) != null;
-    }
-
-    public static boolean isLeftBracket(char c) {
-        return c == LEFT_BRACKET.getCharacter();
-    }
-
-    public static boolean isRightBracket(char c) {
-        return c == RIGHT_BRACKET.getCharacter();
     }
 }

@@ -8,12 +8,12 @@ public class App
 {
     public static void main( String[] args )
     {
-        // List<Double> roots = newton();
-        // roots.forEach(root -> System.out.println(root));
-
-        Expression ex = new Expression("4 + (8 / 2)");
-        System.out.println(ex.evaluate());
-        
+        int i = 12;
+        boolean x = (i == 12);
+        while(x) {
+            i = 15;
+            System.out.println("No!!!");
+        }
     }
 
     public static double f(double x) {
