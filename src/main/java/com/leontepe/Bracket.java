@@ -12,6 +12,12 @@ public class Bracket extends ExpressionElement {
         this.character = character;
     }
 
+    public static Bracket get(char c) {
+        if(isLeftBracket(c)) return LEFT_BRACKET;
+        else if(isRightBracket(c)) return RIGHT_BRACKET;
+        else return null;
+    }
+
     public static boolean isLeftBracket(char c) {
         return c == LEFT_BRACKET.getCharacter();
     }
@@ -26,5 +32,9 @@ public class Bracket extends ExpressionElement {
 
     public char getCharacter() {
         return this.character;
+    }
+
+    public String getStringValue() {
+        return String.valueOf(getCharacter());
     }
 }

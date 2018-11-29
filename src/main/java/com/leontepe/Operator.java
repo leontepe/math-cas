@@ -34,6 +34,7 @@ public class Operator extends ExpressionElement {
     public int getPrecedence() { return this.precedence; }
     public Associativity getAssociativity() { return this.associativity; }
     public int operate(int op1, int op2) { return this.operator.operate(op1, op2); }
+    public String getStringValue() { return String.valueOf(getCharacter()); }
 
     public static Operator get(char c) {
         Operator operator = null;

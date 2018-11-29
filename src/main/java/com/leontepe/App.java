@@ -8,11 +8,11 @@ public class App
 {
     public static void main( String[] args )
     {
-        int i = 12;
-        boolean x = (i == 12);
-        while(x) {
-            i = 15;
-            System.out.println("No!!!");
+        Expression ex1 = new Expression("(-3.55 + 2.13) / 5481");
+        Expression ex2 = new Expression("-512 * 32");
+        List<ExpressionElement> elements = ex2.getExpressionElements();
+        for(ExpressionElement el : elements) {
+            System.out.println(el.getStringValue());
         }
     }
 

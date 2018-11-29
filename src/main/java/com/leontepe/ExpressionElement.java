@@ -1,4 +1,6 @@
 
 package com.leontepe;
 
-public class ExpressionElement {}
+public abstract class ExpressionElement {
+    public abstract String getStringValue();
+}

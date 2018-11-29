@@ -16,28 +16,47 @@ public class Expression {
     public String getInfix() { return this.expressionString; }
 
     public List<ExpressionElement> getExpressionElements() {
+        String ex = expressionString.replaceAll("\\s+", "");
         List<ExpressionElement> elements = new ArrayList<ExpressionElement>();
         int numberStartIndex = -1;
-        for(int i = 0; i < expressionString.length(); i++) {
-            char c = expressionString.charAt(i);
-            if(Number.isNumberCharacter(c) && numberStartIndex == -1) {
-                numberStartIndex = i;
-            }
-            else if(Operator.isOperator(c) && numberStartIndex != -1) {
-                String number = expressionString.substring(numberStartIndex, i);
-                if(number.contains(String.valueOf(Number.DECIMAL_SEPARATOR))) {
-                    elements.add(new Number<Double>(Double.parseDouble(number)));
-                }
-                else {
-                    elements.add(new Number<Integer>(Integer.parseInt(number)));
-                }
-                numberStartIndex = -1;
-                elements.add(Operator.get(c));
+
+        for(int i = 0; i < ex.length(); i++) {
+            char c = ex.charAt(i);
+
+            if(numberStartIndex == -1 && (Number.isNumberCharacter(c) || isSignCharacter(ex, i))) {
+                    // start reading number
+                    numberStartIndex = i;
             }
             else {
-                System.out.print("Unexpected");
+                if(!Number.isNumberCharacter(c) && numberStartIndex != -1) {
+                    String numberString = ex.substring(numberStartIndex, i);
+                    elements.add(Number.get(numberString));
+                    numberStartIndex = -1;
+                }
+
+                if(Operator.isOperator(c)) {
+                    elements.add(Operator.get(c));
+                }
+                else if(Bracket.isBracket(c)) {
+                    elements.add(Bracket.get(c));
+                }
             }
         }
+        if(numberStartIndex != -1) {
+            String numberString = ex.substring(numberStartIndex, ex.length());
+            elements.add(Number.get(numberString));
+            numberStartIndex = -1;
+        }
+
+        return elements;
+    }
+
+    /**
+     * Determines if a plus/minus character in an expression string is a sign or an operator.
+     */
+    private boolean isSignCharacter(String ex, int i) {
+        return "+-".contains(ex.substring(i, i+1)) &&
+            (i == 0 || ex.substring(i-1, i).equals(Bracket.LEFT_BRACKET.getStringValue()));
     }
 
     /**
