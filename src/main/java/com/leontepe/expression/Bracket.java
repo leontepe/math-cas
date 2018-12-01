@@ -1,5 +1,5 @@
 
-package com.leontepe;
+package com.leontepe.expression;
 
 public class Bracket extends ExpressionElement {
 

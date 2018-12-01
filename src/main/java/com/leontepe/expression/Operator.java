@@ -1,5 +1,5 @@
 
-package com.leontepe;
+package com.leontepe.expression;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -12,16 +12,11 @@ public class Operator extends ExpressionElement {
 
     @SuppressWarnings("serial")
     private static final List<Operator> operators = new ArrayList<Operator>() {{
-        add(new Operator("+", 0, Associativity.LEFT, (op1, op2) -> {
-            if(Number.isInteger(op1) && Number.isInteger(op2)) {
-                return new Number<Integer>((int)op1.getValue() + (int)op2.getValue());
-            }
-            // return new Number((double)op1.getValue() + (double)op2.getValue());
-        }));
-        add(new Operator("-", 0, Associativity.LEFT, (op1, op2) -> { return op1 - op2; })); 
-        add(new Operator("*", 1, Associativity.LEFT, (op1, op2) -> { return op1 * op2; }));
-        add(new Operator("/", 1, Associativity.LEFT, (op1, op2) -> { return op1 / op2; }));
-        add(new Operator("^", 2, Associativity.RIGHT, (op1, op2) -> { return op1 ^ op2; }));
+        add(new Operator("+", 0, Associativity.LEFT, (op1, op2) -> { return new Number(op1.getValue() + op2.getValue()); }));
+        add(new Operator("-", 0, Associativity.LEFT, (op1, op2) -> { return new Number(op1.getValue() - op2.getValue()); })); 
+        add(new Operator("*", 1, Associativity.LEFT, (op1, op2) -> { return new Number(op1.getValue() * op2.getValue()); }));
+        add(new Operator("/", 1, Associativity.LEFT, (op1, op2) -> { return new Number(op1.getValue() / op2.getValue()); }));
+        add(new Operator("^", 2, Associativity.RIGHT, (op1, op2) -> { return new Number(Math.pow(op1.getValue(), op2.getValue())); }));
     }};
 
     private String stringValue;
@@ -40,7 +35,7 @@ public class Operator extends ExpressionElement {
     public String getStringValue() { return this.stringValue; }
     public int getPrecedence() { return this.precedence; }
     public Associativity getAssociativity() { return this.associativity; }
-    public int operate(int op1, int op2) { return this.operator.operate(op1, op2); }
+    public Number operate(Number op1, Number op2) { return this.operator.operate(op1, op2); }
 
     public static Operator get(String s) {
         Operator op = getOperator(s);

@@ -1,6 +1,5 @@
-package com.leontepe;
+package com.leontepe.expression;
 
-@SuppressWarnings("rawtypes")
 public interface IOperator {
     Number operate(Number op1, Number op2);
 }

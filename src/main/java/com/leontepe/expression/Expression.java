@@ -1,9 +1,10 @@
 
-package com.leontepe;
+package com.leontepe.expression;
 
 import java.util.*;
 
-import com.leontepe.Operator.Associativity;
+import com.leontepe.expression.Operator.Associativity;
+import com.leontepe.exception.EvaluationException;
 
 public class Expression {
     
@@ -62,7 +63,6 @@ public class Expression {
     /**
      * Shunting-yard algorithm.
      */
-    @SuppressWarnings("rawtypes")
     public List<ExpressionElement> getPostfix() {
         
         List<ExpressionElement> infix = getExpressionElements();
@@ -119,7 +119,6 @@ public class Expression {
         return false;
     }
 
-    @SuppressWarnings("rawtypes")
     public Number evaluate() {
         Stack<Number> numberStack = new Stack<Number>();
         List<ExpressionElement> postfix = getPostfix();
@@ -132,16 +131,9 @@ public class Expression {
                 Operator operator = (Operator)el;
                 Number operand2 = numberStack.pop();
                 Number operand1 = numberStack.pop();
-                numberStack.push(operator.operate(op1, op2))
+                numberStack.push(operator.operate(operand1, operand2));
             }
-            else if(Operator.getStringValue(c)) {
-                int op2 = numberStack.pop();
-                int op1 = numberStack.pop();
-                numberStack.push(Operator.get(c).operate(op1, op2));
-            }
-            else {
-                System.out.println("Unexpected");
-            }
+            else throw new EvaluationException();
         }
         return numberStack.firstElement();
     }

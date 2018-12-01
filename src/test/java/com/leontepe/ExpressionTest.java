@@ -7,6 +7,9 @@ import java.util.List;
 
 import org.junit.Test;
 
+import com.leontepe.expression.*;
+import com.leontepe.expression.Number;
+
 public class ExpressionTest {
 
     @Test
@@ -156,10 +159,10 @@ public class ExpressionTest {
 
     @Test
     public void testEvaluateExpressions() {
-        assertEquals(new Expression("3 - (6 / 2)").evaluate(), 0);
-        assertEquals(new Expression("9 + (3 * 8)").evaluate(), 33);
-        assertEquals(new Expression("2 + 8/3").evaluate(), 4);
-        assertEquals(new Expression("3 - 8 / 2").evaluate(), -1);
+        assertEquals(new Expression("3 - (6 / 2)").evaluate(), new Number(0));
+        assertEquals(new Expression("9 + (3 * 8)").evaluate(), new Number(33));
+        assertEquals(new Expression("2 - (-8 / 4)").evaluate(), new Number(4));
+        assertEquals(new Expression("3 - 8 / 2").evaluate(), new Number(-1));
     }
 
  

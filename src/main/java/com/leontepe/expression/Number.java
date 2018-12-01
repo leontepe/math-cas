@@ -1,25 +1,19 @@
 
-package com.leontepe;
+package com.leontepe.expression;
 
-public class Number<T extends java.lang.Number> extends ExpressionElement {
+public class Number extends ExpressionElement {
 
     public static final char DECIMAL_SEPARATOR = '.';
 
-    private T value;
+    private double value;
     
-    public Number(T value) {
+    public Number(double value) {
         this.value = value;
     }
 
-    @SuppressWarnings("rawtypes")
     public static Number get(String s) {
         try {
-            if(s.contains(String.valueOf(Number.DECIMAL_SEPARATOR))) {
-                return new Number<Double>(Double.parseDouble(s));
-            }
-            else {
-                return new Number<Integer>(Integer.parseInt(s));
-            }
+            return new Number(Double.parseDouble(s));
         }
         catch(NumberFormatException e) {
             throw new IllegalArgumentException();
@@ -32,23 +26,26 @@ public class Number<T extends java.lang.Number> extends ExpressionElement {
     }
 
     public boolean isInteger() {
-        return getValue() == Math.floor(getValue()) && !Double.isInfinite(number);
+        return value == Math.floor(value) && !Double.isInfinite(value);
     }
 
-    public T getValue() {
+    public boolean isEven() {
+        return value % 2 == 0;
+    }
+
+    public double getValue() {
         return this.value;
     }
     
     public String getStringValue() {
-        return this.value.toString();
+        return Double.toString(this.value);
     }
 
     @Override
-    @SuppressWarnings("rawtypes")
     public boolean equals(Object obj) {
         if(obj instanceof Number) {
             Number number = (Number)obj;
-            return number.getValue().equals(this.value);
+            return number.getValue() == this.value;
         }
         return false;
     }
