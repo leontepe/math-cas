@@ -11,33 +11,40 @@ public class Number<T extends java.lang.Number> extends ExpressionElement {
         this.value = value;
     }
 
+    @SuppressWarnings("rawtypes")
     public static Number get(String s) {
-        if(s.contains(String.valueOf(Number.DECIMAL_SEPARATOR))) {
-            return new Number<Double>(Double.parseDouble(s));
+        try {
+            if(s.contains(String.valueOf(Number.DECIMAL_SEPARATOR))) {
+                return new Number<Double>(Double.parseDouble(s));
+            }
+            else {
+                return new Number<Integer>(Integer.parseInt(s));
+            }
         }
-        else {
-            return new Number<Integer>(Integer.parseInt(s));
+        catch(NumberFormatException e) {
+            throw new IllegalArgumentException();
         }
     }
 
-    public static boolean isNumber(String s) {
-        // if for example ".003" is not a valid number, replace with "^[0-9]+\\.?[0-9]*$"
-        return s.matches("^[0-9]*\\.?[0-9]$");
+    public static boolean isNumberCharacter(String s) {
+        if(s.length() > 1) throw new IllegalArgumentException();
+        return Character.isDigit(s.charAt(0)) || s.charAt(0) == DECIMAL_SEPARATOR;
     }
 
-    public static boolean isNumberCharacter(char c) {
-        return Character.isDigit(c) || c == DECIMAL_SEPARATOR;
+    public boolean isInteger() {
+        return getValue() == Math.floor(getValue()) && !Double.isInfinite(number);
     }
 
     public T getValue() {
         return this.value;
     }
-
+    
     public String getStringValue() {
-        return String.valueOf(getValue());
+        return this.value.toString();
     }
 
     @Override
+    @SuppressWarnings("rawtypes")
     public boolean equals(Object obj) {
         if(obj instanceof Number) {
             Number number = (Number)obj;

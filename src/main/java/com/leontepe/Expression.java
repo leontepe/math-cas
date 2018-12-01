@@ -21,7 +21,7 @@ public class Expression {
         int numberStartIndex = -1;
 
         for(int i = 0; i < ex.length(); i++) {
-            char c = ex.charAt(i);
+            String c = ex.substring(i, i+1);
 
             if(numberStartIndex == -1 && (Number.isNumberCharacter(c) || isSignCharacter(ex, i))) {
                     // start reading number
@@ -45,7 +45,7 @@ public class Expression {
         if(numberStartIndex != -1) {
             String numberString = ex.substring(numberStartIndex, ex.length());
             elements.add(Number.get(numberString));
-            numberStartIndex = -1;
+            numberStartIndex = -1; 
         }
 
         return elements;
@@ -62,49 +62,46 @@ public class Expression {
     /**
      * Shunting-yard algorithm.
      */
-    public String getPostfix() {
+    @SuppressWarnings("rawtypes")
+    public List<ExpressionElement> getPostfix() {
         
-        // Remove whitespace.
-        String infix = expressionString.replaceAll("\\s+", "");
-        String postfix = "";
+        List<ExpressionElement> infix = getExpressionElements();
+        List<ExpressionElement> postfix = new ArrayList<ExpressionElement>();
 
         Stack<ExpressionElement> operatorStack = new Stack<ExpressionElement>();
 
-        for(char c : infix.toCharArray()) {
-            if(Operator.isOperator(c)) {
-                Operator currentOperator = Operator.get(c);
+        for(ExpressionElement el : infix) {
+            if(el instanceof Operator) {
+                Operator currentOperator = (Operator)el;
                 while(mustPopStack(operatorStack, currentOperator))
                 {
-                    postfix += ((Operator)operatorStack.pop()).getCharacter();
+                    postfix.add(((Operator)operatorStack.pop()));
                 }
                 operatorStack.push(currentOperator);
             }
-            else if(Bracket.isLeftBracket(c)) {
-                operatorStack.push(Bracket.LEFT_BRACKET);
-            }
-            else if(Bracket.isRightBracket(c)) {
-                while(!operatorStack.isEmpty() &&
-                    operatorStack.peek() != Bracket.LEFT_BRACKET) {
-                    postfix += ((Operator)(operatorStack.pop())).getCharacter();
+            else if(el instanceof Bracket) {
+                Bracket bracket = (Bracket)el;
+                if(bracket == Bracket.LEFT_BRACKET) {
+                    operatorStack.push(Bracket.LEFT_BRACKET);
                 }
-                // Pop left bracket from the stack.
-                operatorStack.pop();
+                else if(bracket == Bracket.RIGHT_BRACKET) {
+                    while(!operatorStack.isEmpty() &&
+                        operatorStack.peek() != Bracket.LEFT_BRACKET) {
+                        postfix.add(((Operator)operatorStack.pop()));
+                    }
+                    // Pop left bracket from the stack.
+                    operatorStack.pop();
+                }
+                
             }
-            else if(Character.isDigit(c)) {
-                postfix += c;
-            }
-            else {
-                System.out.println("Infix expression is invalid. Cannot parse to postfix.");
+            else if(el instanceof Number) {
+                Number number = (Number)el;
+                postfix.add(number);
             }
         }
         while(!operatorStack.isEmpty()) {
             ExpressionElement popped = operatorStack.pop();
-            if(popped instanceof Operator) {
-                postfix += ((Operator)popped).getCharacter();
-            }
-            else if(popped instanceof Bracket) {
-                postfix += ((Bracket)popped).getCharacter();
-            }
+            postfix.add(popped);
         }
 
         return postfix;
@@ -122,22 +119,31 @@ public class Expression {
         return false;
     }
 
-    public int evaluate() {
-        Stack<Integer> valueStack = new Stack<Integer>();
-        for(char c : getPostfix().toCharArray()) {
-            if(Character.isDigit(c)) {
-                valueStack.push(Character.getNumericValue(c));
+    @SuppressWarnings("rawtypes")
+    public Number evaluate() {
+        Stack<Number> numberStack = new Stack<Number>();
+        List<ExpressionElement> postfix = getPostfix();
+        for(ExpressionElement el : postfix) {
+            if(el instanceof Number) {
+                Number number = (Number)el;
+                numberStack.push(number);
             }
-            else if(Operator.isOperator(c)) {
-                int op2 = valueStack.pop();
-                int op1 = valueStack.pop();
-                valueStack.push(Operator.get(c).operate(op1, op2));
+            else if(el instanceof Operator) {
+                Operator operator = (Operator)el;
+                Number operand2 = numberStack.pop();
+                Number operand1 = numberStack.pop();
+                numberStack.push(operator.operate(op1, op2))
+            }
+            else if(Operator.getStringValue(c)) {
+                int op2 = numberStack.pop();
+                int op1 = numberStack.pop();
+                numberStack.push(Operator.get(c).operate(op1, op2));
             }
             else {
                 System.out.println("Unexpected");
             }
         }
-        return valueStack.firstElement();
+        return numberStack.firstElement();
     }
 
 }

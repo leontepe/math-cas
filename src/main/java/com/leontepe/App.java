@@ -8,10 +8,8 @@ public class App
 {
     public static void main( String[] args )
     {
-        Expression ex1 = new Expression("(-3.55 + 2.13) / 5481");
-        Expression ex2 = new Expression("-512 * 32");
-        List<ExpressionElement> elements = ex2.getExpressionElements();
-        for(ExpressionElement el : elements) {
+        Expression ex4 = new Expression("2^3^3");
+        for(ExpressionElement el : ex4.getExpressionElements()) {
             System.out.println(el.getStringValue());
         }
     }
