@@ -38,7 +38,12 @@ public class Number extends ExpressionElement {
     }
     
     public String getStringValue() {
-        return Double.toString(this.value);
+        if(isInteger()) {
+            return Integer.toString((int)value);
+        }
+        else {
+            return Double.toString(value);
+        }
     }
 
     @Override

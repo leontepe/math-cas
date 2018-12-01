@@ -1,5 +1,5 @@
 
-package com.leontepe;
+package com.leontepe.function;
 
 public class Function {
 

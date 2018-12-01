@@ -24,7 +24,11 @@ public class Expression {
         for(int i = 0; i < ex.length(); i++) {
             String c = ex.substring(i, i+1);
 
-            if(numberStartIndex == -1 && (Number.isNumberCharacter(c) || isSignCharacter(ex, i))) {
+            if(isSignCharacter(ex, i)) {
+                elements.add(new Number(0));
+            }
+            
+            if(numberStartIndex == -1 && Number.isNumberCharacter(c)) {
                     // start reading number
                     numberStartIndex = i;
             }
