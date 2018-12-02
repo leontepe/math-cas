@@ -9,22 +9,38 @@ import com.leontepe.exception.EvaluationException;
 public class Expression {
     
     private String expressionString;
+    private List<ExpressionElement> elements;
 
     public Expression(String expressionString) {
         this.expressionString = expressionString;
+        this.elements = parseExpressionElements(expressionString);
     }
 
-    public String getInfix() { return this.expressionString; }
+    public Expression(List<ExpressionElement> elements) {
+        this.elements = elements;
+        this.expressionString = parseFunctionName(elements);
+    }
 
-    public List<ExpressionElement> getExpressionElements() {
-        String ex = expressionString.replaceAll("\\s+", "");
+    public String getString() { return this.expressionString; }
+    public List<ExpressionElement> getElements() { return this.elements; }
+
+    private static String parseFunctionName(List<ExpressionElement> elements) {
+        String s = "";
+        for(ExpressionElement el : elements) {
+            s += el.getStringValue();
+        }
+        return s;
+    }
+
+    private static List<ExpressionElement> parseExpressionElements(String s) {
+        s = s.replaceAll("\\s+", "");
         List<ExpressionElement> elements = new ArrayList<ExpressionElement>();
         int numberStartIndex = -1;
 
-        for(int i = 0; i < ex.length(); i++) {
-            String c = ex.substring(i, i+1);
+        for(int i = 0; i < s.length(); i++) {
+            String c = s.substring(i, i+1);
 
-            if(isSignCharacter(ex, i)) {
+            if(isSignCharacter(s, i)) {
                 elements.add(new Number(0));
             }
             
@@ -34,21 +50,27 @@ public class Expression {
             }
             else {
                 if(!Number.isNumberCharacter(c) && numberStartIndex != -1) {
-                    String numberString = ex.substring(numberStartIndex, i);
+                    String numberString = s.substring(numberStartIndex, i);
                     elements.add(Number.get(numberString));
                     numberStartIndex = -1;
                 }
-
                 if(Operator.isOperator(c)) {
                     elements.add(Operator.get(c));
                 }
                 else if(Bracket.isBracket(c)) {
                     elements.add(Bracket.get(c));
                 }
+                else if(Variable.isVariable(c)) {
+                    String previous = s.substring(i-1, i);
+                    if(Number.isNumberCharacter(previous) || Bracket.isRightBracket(previous)) {
+                        elements.add(Operator.get("*"));
+                    }
+                    elements.add(Variable.get(c));
+                }
             }
         }
         if(numberStartIndex != -1) {
-            String numberString = ex.substring(numberStartIndex, ex.length());
+            String numberString = s.substring(numberStartIndex, s.length());
             elements.add(Number.get(numberString));
             numberStartIndex = -1; 
         }
@@ -59,9 +81,9 @@ public class Expression {
     /**
      * Determines if a plus/minus character in an expression string is a sign or an operator.
      */
-    private boolean isSignCharacter(String ex, int i) {
-        return "+-".contains(ex.substring(i, i+1)) &&
-            (i == 0 || ex.substring(i-1, i).equals(Bracket.LEFT_BRACKET.getStringValue()));
+    private static boolean isSignCharacter(String s, int i) {
+        return "+-".contains(s.substring(i, i+1)) &&
+            (i == 0 || s.substring(i-1, i).equals(Bracket.LEFT_BRACKET.getStringValue()));
     }
 
     /**
@@ -69,12 +91,10 @@ public class Expression {
      */
     public List<ExpressionElement> getPostfix() {
         
-        List<ExpressionElement> infix = getExpressionElements();
         List<ExpressionElement> postfix = new ArrayList<ExpressionElement>();
-
         Stack<ExpressionElement> operatorStack = new Stack<ExpressionElement>();
 
-        for(ExpressionElement el : infix) {
+        for(ExpressionElement el : elements) {
             if(el instanceof Operator) {
                 Operator currentOperator = (Operator)el;
                 while(mustPopStack(operatorStack, currentOperator))
@@ -140,6 +160,32 @@ public class Expression {
             else throw new EvaluationException();
         }
         return numberStack.firstElement();
+    }
+
+    public List<Variable> getVariables() {
+        List<Variable> variables = new ArrayList<Variable>();
+        for(ExpressionElement el : elements) {
+            if(el instanceof Variable) {
+                variables.add((Variable)el);
+            }
+        }
+        return variables;
+    }
+
+    public void printElements() {
+        for(ExpressionElement el : elements) {
+            System.out.print(el.getStringValue());
+            System.out.print(" ");
+        }
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof Expression) {
+            Expression ex = (Expression)obj;
+            return ex.getElements().equals(elements);
+        }
+        return false;
     }
 
 }
