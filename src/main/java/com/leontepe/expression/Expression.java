@@ -61,10 +61,12 @@ public class Expression {
                     elements.add(Bracket.get(c));
                 }
                 else if(Variable.isVariable(c)) {
+                    if(i > 0) {
                     String previous = s.substring(i-1, i);
                     if(Number.isNumberCharacter(previous) || Bracket.isRightBracket(previous)) {
                         elements.add(Operator.get("*"));
                     }
+                }
                     elements.add(Variable.get(c));
                 }
             }
@@ -177,6 +179,7 @@ public class Expression {
             System.out.print(el.getStringValue());
             System.out.print(" ");
         }
+        System.out.println();
     }
 
     @Override
@@ -186,6 +189,19 @@ public class Expression {
             return ex.getElements().equals(elements);
         }
         return false;
+    }
+
+    public Expression substitute(Variable variable, Number number) {
+        for(ExpressionElement el : elements) {
+            if(el instanceof Variable) {
+                Variable var = (Variable)el;
+                if(variable.equals(var)) {
+                    int i = elements.indexOf(el);
+                    elements.set(i, number);
+                }
+            }
+        }
+        return new Expression(elements);
     }
 
 }

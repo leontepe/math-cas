@@ -28,7 +28,7 @@ public class SubstitutionTest {
         elements1.add(Number.get("2"));
         elements1.add(Operator.get("-"));
         elements1.add(Number.get("5"));
-        assertEquals(f1.substitute(Variable.get("x"), new Number(2)).getElements(), elements1);
+        assertEquals(f1.getExpression().substitute(Variable.get("x"), new Number(2)).getElements(), elements1);
 
         Function f2 = new Function("g(x) = 1/4x^2 - 2x + 3");
         List<ExpressionElement> elements2 = new ArrayList<ExpressionElement>();
@@ -37,7 +37,7 @@ public class SubstitutionTest {
         elements2.add(Number.get("2"));
         elements2.add(Operator.get("-"));
         elements2.add(Number.get("5"));
-        assertEquals(f2.substitute(Variable.get("x"), new Number(2)).getElements(), elements2);
+        assertEquals(f2.getExpression().substitute(Variable.get("x"), new Number(2)).getElements(), elements2);
     }
 
 }

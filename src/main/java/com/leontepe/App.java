@@ -1,7 +1,6 @@
 package com.leontepe;
 
 import com.leontepe.expression.*;
-import com.leontepe.expression.Number;
 import com.leontepe.function.*;
 
 
@@ -9,10 +8,8 @@ public class App
 {
     public static void main( String[] args )
     {
-        Function f3 = new Function("z(x, y) = - 7 x + 2y - 10x + 0");
-        f3.getExpression().printElements();
-        System.out.println();
-        new Expression("-7x + 2y - 10x + 0").printElements();
+        Function f = new Function("f(x) = x^2");
+        f.printValueRange(-4, 4, 0.5);
     }
 
     // "-3+5" -> "0-3+5" -> "0", "-", "3", "+", "5" -> "03-5+" -> 2
