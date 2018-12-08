@@ -6,7 +6,7 @@ import java.util.*;
 import com.leontepe.expression.Operator.Associativity;
 import com.leontepe.exception.EvaluationException;
 
-public class Expression {
+public class Expression extends ExpressionElement {
     
     private String expressionString;
     private List<ExpressionElement> elements;
@@ -21,7 +21,7 @@ public class Expression {
         this.expressionString = parseFunctionName(elements);
     }
 
-    public String getString() { return this.expressionString; }
+    public String getStringValue() { return this.expressionString; }
     public List<ExpressionElement> getElements() { return this.elements; }
 
     private static String parseFunctionName(List<ExpressionElement> elements) {

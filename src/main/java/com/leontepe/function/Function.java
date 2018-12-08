@@ -12,7 +12,7 @@ public class Function {
     private String functionString;
     private Expression expression;
     private String functionName;
-    private List<Variable> variables;
+    private Variable[] variables;
 
     public Function(String functionString) {
         this.functionString = functionString;
@@ -24,7 +24,16 @@ public class Function {
     public String getString() { return this.functionString; }
     public String getFunctionName() { return this.functionName; }
     public Expression getExpression() { return this.expression; }
-    public List<Variable> getVariables() { return this.variables; }
+    public Variable[] getVariables() { return this.variables; }
+
+    public String getFunctionNameWithVariables() {
+        String s = functionName + "(";
+        for(int i = 0; i < variables.length; i++) {
+            s += variables[i].getStringValue();
+            if(i < variables.length-1) s += ",";
+        }
+        return s + ")";
+    }
 
     public Function differentiate() {
         return null;
@@ -47,37 +56,35 @@ public class Function {
         return s.substring(0, i);
     }
 
-    private static List<Variable> parseVariables(String s) {
-        List<Variable> vars = new ArrayList<Variable>();
+    private static Variable[] parseVariables(String s) {
         s = s.replaceAll("\\s+", "");
         s = s.substring(s.indexOf("(")+1, s.indexOf(")"));
-        for(String var : s.split(",")) {
-            vars.add(Variable.get(var));
+        String[] splits = s.split(",");
+        Variable[] vars = new Variable[splits.length];
+        for(int i = 0; i < splits.length; i++) {
+            vars[i] = Variable.get(splits[i]);
         }
         return vars;
     }
 
-    // TODO: Add tests
     public Number valueAt(Number... numbers) {
         Expression ex = expression;
-        if(numbers.length != variables.size()) throw new IllegalArgumentException();
+        if(numbers.length != variables.length) throw new IllegalArgumentException();
         for(int i = 0; i < numbers.length; i++) {
-            ex = ex.substitute(variables.get(i), numbers[i]);
+            ex = ex.substitute(variables[i], numbers[i]);
         }
         return ex.evaluate();
     }
 
-    // TODO: Add tests
     public double valueAt(double... inputs) {
-        Expression ex = new Expression(this.expression.getString());
-        if(inputs.length != variables.size()) throw new IllegalArgumentException();
+        Expression ex = new Expression(this.expression.getStringValue());
+        if(inputs.length != variables.length) throw new IllegalArgumentException();
         for(int i = 0; i < inputs.length; i++) {
-            ex = ex.substitute(variables.get(i), new Number(inputs[i]));
+            ex = ex.substitute(variables[i], new Number(inputs[i]));
         }
         return ex.evaluate().getValue();
     }
 
-    // TODO: Add tests
     public double[] valueRange(double start, double end, double step) {
         double range = (end - start);
         if(range % step != 0) throw new IllegalArgumentException();
@@ -91,6 +98,7 @@ public class Function {
     }
 
     public void printValueRange(double start, double end, double step) {
+        System.out.println("Printing value range for function")
         double[] valueRange = valueRange(start, end, step);
         for(int i = 0; i < valueRange.length; i++) {
             double input = start + i * step;
