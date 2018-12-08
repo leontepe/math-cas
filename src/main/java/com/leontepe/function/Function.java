@@ -4,9 +4,6 @@ package com.leontepe.function;
 import com.leontepe.expression.*;
 import com.leontepe.expression.Number;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Function {
 
     private String functionString;
@@ -98,11 +95,16 @@ public class Function {
     }
 
     public void printValueRange(double start, double end, double step) {
-        System.out.println("Printing value range for function")
+        System.out.println("Printing value range for function " + getString() + " for values from " + start + " to "  + end + " with a step of " + step + ".");
         double[] valueRange = valueRange(start, end, step);
         for(int i = 0; i < valueRange.length; i++) {
             double input = start + i * step;
             System.out.println(functionName + "(" + input + ")" + " = " + valueRange[i]);
         }
+    }
+
+    public ExpressionElement getSummands() {
+        
+        return null;
     }
 }
