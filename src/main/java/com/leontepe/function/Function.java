@@ -102,9 +102,4 @@ public class Function {
             System.out.println(functionName + "(" + input + ")" + " = " + valueRange[i]);
         }
     }
-
-    public ExpressionElement getSummands() {
-        
-        return null;
-    }
 }

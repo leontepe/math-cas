@@ -55,5 +55,9 @@ public class Number extends ExpressionElement {
         return false;
     }
 
+    public void flipSign() {
+        this.value = -this.value;
+    }
+
 
 }

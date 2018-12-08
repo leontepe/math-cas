@@ -25,13 +25,13 @@ public class StringToExpressionElementsTest {
 
         Expression ex2 = new Expression("(-3.55 + 2.13) / 5481");
         List<ExpressionElement> elements2 = new ArrayList<ExpressionElement>();
-        elements2.add(Bracket.get("("));
+        elements2.add(Paranthesis.get("("));
         elements2.add(Number.get("0"));
         elements2.add(Operator.get("-"));
         elements2.add(Number.get("3.55"));
         elements2.add(Operator.get("+"));
         elements2.add(Number.get("2.13"));
-        elements2.add(Bracket.get(")"));
+        elements2.add(Paranthesis.get(")"));
         elements2.add(Operator.get("/"));
         elements2.add(Number.get("5481"));
         assertEquals(ex2.getElements(), elements2);
@@ -42,15 +42,15 @@ public class StringToExpressionElementsTest {
         elements3.add(Operator.get("-"));
         elements3.add(Number.get("3"));
         elements3.add(Operator.get("+"));
-        elements3.add(Bracket.get("("));
-        elements3.add(Bracket.get("("));
+        elements3.add(Paranthesis.get("("));
+        elements3.add(Paranthesis.get("("));
         elements3.add(Number.get("3"));
         elements3.add(Operator.get("-"));
         elements3.add(Number.get("5"));
-        elements3.add(Bracket.get(")"));
+        elements3.add(Paranthesis.get(")"));
         elements3.add(Operator.get("/"));
         elements3.add(Number.get("2"));
-        elements3.add(Bracket.get(")"));
+        elements3.add(Paranthesis.get(")"));
         assertEquals(ex3.getElements(), elements3);
 
         Expression ex4 = new Expression("-10 + 32");

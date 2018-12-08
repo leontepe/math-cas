@@ -56,4 +56,13 @@ public class Operator extends ExpressionElement {
     public static boolean isOperator(String s) {
         return getOperator(s) != null;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof Operator) {
+            Operator op = (Operator)obj;
+            return op.getStringValue().equals(this.stringValue);
+        }
+        return false;
+    }
 }

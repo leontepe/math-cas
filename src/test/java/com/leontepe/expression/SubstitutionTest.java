@@ -8,16 +8,9 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.leontepe.expression.*;
 import com.leontepe.expression.Number;
 
 public class SubstitutionTest {
-
-    // "f(x) = 3x - 5"
-    // => functionName = "f"
-    // => expression = "3x-5"
-    //      => expressionElements = {"3", "*", "x", "-", "5"}
-    //
 
     @Test
     public void testSubstitution() {
