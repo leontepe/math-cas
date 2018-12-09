@@ -13,7 +13,7 @@ public class Expression extends ExpressionElement {
 
     public Expression(String expressionString) {
         this.expressionString = expressionString;
-        this.elements = parseExpressionElements(expressionString);
+        this.elements = parseElements(expressionString);
     }
 
     public Expression(List<ExpressionElement> elements) {
@@ -32,7 +32,7 @@ public class Expression extends ExpressionElement {
         return s;
     }
 
-    private static List<ExpressionElement> parseExpressionElements(String s) {
+    private static List<ExpressionElement> parseElements(String s) {
         s = s.replaceAll("\\s+", "");
         List<ExpressionElement> elements = new ArrayList<ExpressionElement>();
         int numberStartIndex = -1;
@@ -115,7 +115,6 @@ public class Expression extends ExpressionElement {
                         operatorStack.peek() != Paranthesis.LEFT_PARANTHESIS) {
                         postfix.add(((Operator)operatorStack.pop()));
                     }
-                    // Pop left bracket from the stack.
                     operatorStack.pop();
                 }
                 
@@ -217,8 +216,11 @@ public class Expression extends ExpressionElement {
         int start = 0;
         int end = 0;
         for(ExpressionElement el : elements) {
+            // TODO: omit expressions within brackets (only get top-level summands)
             if(el instanceof Operator) {
                 Operator op = (Operator)el;
+                
+                // TODO: and if end != 0 because leading minus or plus elements are signs and not operators
                 if(op.equals(minus) || op.equals(plus)) {
                     List<ExpressionElement> subElements = elements.subList(start, end);
                     summands.add(new Expression(subElements));
@@ -237,7 +239,7 @@ public class Expression extends ExpressionElement {
     }
 
     public boolean containsParantheses() {
-        return elements.contains(Paranthesis.LEFT_PARANTHESIS) || elements.contains(Paranthesis.RIGHT_PARANTHESIS);
+        return contains(Paranthesis.LEFT_PARANTHESIS) || contains(Paranthesis.RIGHT_PARANTHESIS);
     }
 
 }

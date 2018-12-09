@@ -136,6 +136,9 @@ public class InfixToPostfixTest {
         elements1.add(Operator.get("-"));
         assertEquals(ex1.getPostfix(), elements1);
 
+        // "-(3+5)" --parseElements()--> [-][(][3][+][5][)]
+        // --getPostfix()--> [-1][3][5][+][*] --evaluate()--> [-8]
+
         Expression ex2 = new Expression("-3+5");
         List<ExpressionElement> elements2 = new ArrayList<ExpressionElement>();
         elements2.add(Number.get("0"));
@@ -144,6 +147,10 @@ public class InfixToPostfixTest {
         elements2.add(Number.get("5"));
         elements2.add(Operator.get("+"));
         assertEquals(ex2.getPostfix(), elements2);
+
+        // "-3^5" --parseElements()--> [-][3][^][5]
+        // 1. --getPostfix()--> [-1][3][5][^][*] --evaluate()--> [-243]
+        // 2. --getSummands()--> 
 
         Expression ex3 = new Expression("-3^5");
         List<ExpressionElement> elements3 = new ArrayList<ExpressionElement>();

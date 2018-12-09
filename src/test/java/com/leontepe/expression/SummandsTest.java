@@ -42,4 +42,14 @@ public class SummandsTest {
         assertEquals(ee1, ee2);
     }
 
+    @Test
+    public void testSummandSplitting3() {
+        Expression e1 = new Expression("-2(x-3)^2 + 1/2(x-3) - 10");
+        List<Expression> expressions1 = new ArrayList<Expression>();
+        expressions1.add(new Expression("-2(x-3)^2"));
+        expressions1.add(new Expression("1/2(x-3)"));
+        expressions1.add(new Expression("-10"));
+        assertEquals(e1.getSummands(), expressions1);
+    }
+
 }
