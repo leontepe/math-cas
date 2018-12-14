@@ -5,26 +5,25 @@ import java.util.*;
 
 import com.leontepe.expression.Operator.Associativity;
 import com.leontepe.exception.EvaluationException;
+import com.leontepe.exception.ExpressionParsingException;
 
 public class Expression extends ExpressionElement {
     
-    private String expressionString;
     private List<ExpressionElement> elements;
 
     public Expression(String expressionString) {
-        this.expressionString = expressionString;
         this.elements = parseElements(expressionString);
+        checkExpression();
     }
 
     public Expression(List<ExpressionElement> elements) {
         this.elements = elements;
-        this.expressionString = parseExpressionString(elements);
+        checkExpression();
     }
 
-    public String getStringValue() { return this.expressionString; }
     public List<ExpressionElement> getElements() { return this.elements; }
-
-    private static String parseExpressionString(List<ExpressionElement> elements) {
+    
+    public String getStringValue() {
         String s = "";
         for(ExpressionElement el : elements) {
             s += el.getStringValue();
@@ -40,9 +39,9 @@ public class Expression extends ExpressionElement {
         for(int i = 0; i < s.length(); i++) {
             String c = s.substring(i, i+1);
 
-            if(isSignCharacter(s, i)) {
-                elements.add(new Number(0));
-            }
+            // if(isSignCharacter(s, i)) {
+            //     elements.add(new Number(0));
+            // }
             
             if(numberStartIndex == -1 && Number.isNumberCharacter(c)) {
                     // start reading number
@@ -62,11 +61,11 @@ public class Expression extends ExpressionElement {
                 }
                 else if(Variable.isVariable(c)) {
                     if(i > 0) {
-                    String previous = s.substring(i-1, i);
-                    if(Number.isNumberCharacter(previous) || Paranthesis.isRightParanthesis(previous)) {
-                        elements.add(Operator.get("*"));
+                        String previous = s.substring(i-1, i);
+                        if(Number.isNumberCharacter(previous) || Paranthesis.isRightParanthesis(previous)) {
+                            elements.add(Operator.get("*"));
+                        }
                     }
-                }
                     elements.add(Variable.get(c));
                 }
             }
@@ -80,18 +79,63 @@ public class Expression extends ExpressionElement {
         return elements;
     }
 
+    private void checkExpression() {
+        if(elements.size() == 0) throw new ExpressionParsingException("Empty expression.");
+        if(elements.size() == 1 && !(elements.get(0) instanceof Number) && !(elements.get(0) instanceof Variable))
+            throw new ExpressionParsingException("Only numbers and variables can stand alone in an expression.");
+        checkParantheses();
+    }
+
+    private void checkParantheses() {
+        int parenCount = 0;
+        for(ExpressionElement el : elements) {
+            if(el.equals(Paranthesis.LEFT_PARANTHESIS)) {
+                parenCount++;
+            }
+            else if(el.equals(Paranthesis.RIGHT_PARANTHESIS)) {
+                parenCount--;
+            }
+            if(parenCount < 0) {
+                throw new ExpressionParsingException("Mismatched parantheses.");
+            }
+        }
+        if(parenCount != 0) {
+            throw new ExpressionParsingException("Mismatched parantheses.");
+        }
+    }
+
     /**
      * Determines if a plus/minus character in an expression string is a sign or an operator.
      */
     private static boolean isSignCharacter(String s, int i) {
         return "+-".contains(s.substring(i, i+1)) &&
-            (i == 0 || s.substring(i-1, i).equals(Paranthesis.LEFT_PARANTHESIS.getStringValue()));
+        (i == 0 || s.substring(i-1, i).equals(Paranthesis.LEFT_PARANTHESIS.getStringValue()));
     }
+    
+    // "-3+5" -> [-3][+][5]
 
     /**
      * Shunting-yard algorithm.
      */
     public List<ExpressionElement> getPostfix() {
+
+        // prepare for postfix conversion
+        List<ExpressionElement> elementsCopy = new ArrayList<ExpressionElement>(elements);
+        int offset = 0;
+        for(int i = 0; i < elementsCopy.size(); i++) {
+            ExpressionElement el = elementsCopy.get(i);
+            if(el.equals(Operator.get("-"))) {
+                if(elementsCopy.get(i+1).equals(Paranthesis.LEFT_PARANTHESIS)) {
+                    elements.set(i + offset, new Number(-1));
+                    elements.add(i + offset + 1, Operator.get("*"));
+                    offset++;
+                }
+                else if(i == 0 || elementsCopy.get(i-1).equals(Paranthesis.LEFT_PARANTHESIS)) {
+                    elements.add(i-1, new Number(0));
+                    offset++;
+                }
+            }
+        }
         
         List<ExpressionElement> postfix = new ArrayList<ExpressionElement>();
         Stack<ExpressionElement> operatorStack = new Stack<ExpressionElement>();
@@ -145,6 +189,12 @@ public class Expression extends ExpressionElement {
     }
 
     public Number evaluate() {
+
+        // cannot evaluate expressions with variables
+        if(getVariables().size() > 0) {
+            throw new EvaluationException();
+        }
+
         Stack<Number> numberStack = new Stack<Number>();
         List<ExpressionElement> postfix = getPostfix();
         for(ExpressionElement el : postfix) {
@@ -174,8 +224,9 @@ public class Expression extends ExpressionElement {
     }
 
     public void printElements() {
+        int i = 0;
         for(ExpressionElement el : elements) {
-            System.out.print(el.getStringValue());
+            System.out.print("{" + el.getStringValue() + "}");
         }
         System.out.println();
     }
@@ -221,7 +272,7 @@ public class Expression extends ExpressionElement {
                 Operator op = (Operator)el;
                 
                 // TODO: and if end != 0 because leading minus or plus elements are signs and not operators
-                if(op.equals(minus) || op.equals(plus)) {
+                if(end != 0 && (op.equals(minus) || op.equals(plus))) {
                     List<ExpressionElement> subElements = elements.subList(start, end);
                     summands.add(new Expression(subElements));
                     start = op.equals(minus) ? end : end+1;
@@ -229,7 +280,7 @@ public class Expression extends ExpressionElement {
             }
             end++;
         }
-        summands.add(new Expression(elements.subList(start, elements.size())));
+        if((elements.size() - start) > 0) summands.add(new Expression(elements.subList(start, elements.size())));
 
         return summands;
     }
