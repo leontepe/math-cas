@@ -44,9 +44,6 @@ public class App
         // for(int i = 0; i < summands.size(); i++) {
         //     System.out.println(summands.get(i).equals(expressions1.get(i)));
         // }
-
-        Expression ex2 = new Expression("-3+5");
-        ex2.getPostfix()
     }
 
     // "-3+5" -> "0-3+5" -> "0", "-", "3", "+", "5" -> "03-5+" -> 2
