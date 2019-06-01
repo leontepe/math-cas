@@ -8,25 +8,40 @@ import java.util.List;
 
 import org.junit.Test;
 
+import com.leontepe.NotationConverter;
 import com.leontepe.expression.Number;
 
 public class InfixToPostfixTest {
 
     /**
-     * Test infix-to-postfix conversion for simple expressions (no parantheses and single digit integers).
+     * Test infix to postfix conversion for simple expressions (no parantheses and single digit integers).
      */
     @Test
     public void testBasicExpressions() {
-        Expression ex1 = new Expression("3 - 4 / 2");
+        //Expression ex1 = new Expression("3 - 4 / 2");
+        List<ExpressionElement> infix1 = new ArrayList<ExpressionElement>();
+        infix1.add(Number.get("3"));
+        infix1.add(Operator.get("-"));
+        infix1.add(Number.get("4"));
+        infix1.add(Operator.get("/"));
+        infix1.add(Number.get("2"));
         List<ExpressionElement> elements1 = new ArrayList<ExpressionElement>();
         elements1.add(Number.get("3"));
         elements1.add(Number.get("4"));
         elements1.add(Number.get("2"));
         elements1.add(Operator.get("/"));
         elements1.add(Operator.get("-"));
-        assertEquals(ex1.getPostfix(), elements1);
+        assertEquals(NotationConverter.infixToPostfix(infix1), elements1);
 
-        Expression ex2 = new Expression("3+4+4-2");
+        //Expression ex2 = new Expression("3+4+4-2");
+        List<ExpressionElement> infix2 = new ArrayList<ExpressionElement>();
+        infix2.add(Number.get("3"));
+        infix2.add(Operator.get("+"));
+        infix2.add(Number.get("4"));
+        infix2.add(Operator.get("+"));
+        infix2.add(Number.get("4"));
+        infix2.add(Operator.get("-"));
+        infix2.add(Number.get("2"));
         List<ExpressionElement> elements2 = new ArrayList<ExpressionElement>();
         elements2.add(Number.get("3"));
         elements2.add(Number.get("4"));
@@ -35,9 +50,17 @@ public class InfixToPostfixTest {
         elements2.add(Operator.get("+"));
         elements2.add(Number.get("2"));
         elements2.add(Operator.get("-"));
-        assertEquals(ex2.getPostfix(), elements2);
+        assertEquals(NotationConverter.infixToPostfix(elements2), infix2);
 
-        Expression ex3 = new Expression("7/8 - 4*3");
+        //Expression ex3 = new Expression("7/8 - 4*3");
+        List<ExpressionElement> infix3 = new ArrayList<ExpressionElement>();
+        infix3.add(Number.get("7"));
+        infix3.add(Operator.get("/"));
+        infix3.add(Number.get("8"));
+        infix3.add(Operator.get("-"));
+        infix3.add(Number.get("4"));
+        infix3.add(Operator.get("*"));
+        infix3.add(Number.get("3"));
         List<ExpressionElement> elements3 = new ArrayList<ExpressionElement>();
         elements3.add(Number.get("7"));
         elements3.add(Number.get("8"));
@@ -46,16 +69,22 @@ public class InfixToPostfixTest {
         elements3.add(Number.get("3"));
         elements3.add(Operator.get("*"));
         elements3.add(Operator.get("-"));
-        assertEquals(ex3.getPostfix(), elements3);
+        assertEquals(NotationConverter.infixToPostfix(elements3), infix3);
 
-        Expression ex4 = new Expression("2^3^3");
+        //Expression ex4 = new Expression("2^3^3");
+        List<ExpressionElement> infix4 = new ArrayList<ExpressionElement>();
+        infix4.add(Number.get("2"));
+        infix4.add(Operator.get("^"));
+        infix4.add(Number.get("3"));
+        infix4.add(Operator.get("^"));
+        infix4.add(Number.get("3"));
         List<ExpressionElement> elements4 = new ArrayList<ExpressionElement>();
         elements4.add(Number.get("2"));
         elements4.add(Number.get("3"));
         elements4.add(Number.get("3"));
         elements4.add(Operator.get("^"));
         elements4.add(Operator.get("^"));
-        assertEquals(ex4.getPostfix(), elements4);
+        assertEquals(NotationConverter.infixToPostfix(elements4), infix4);
 
         // Expression ex5 = new Expression("-5");
         // List<ExpressionElement> elements5 = new ArrayList<ExpressionElement>();
@@ -115,49 +144,61 @@ public class InfixToPostfixTest {
         elements5.add(Operator.get("^"));
         assertEquals(ex5.getPostfix(), elements5);
 
-        // Expression ex6 = new Expression("(-5)");
-        // List<ExpressionElement> elements6 = new ArrayList<ExpressionElement>();
-        // elements6.add(Number.get("0"));
-        // elements6.add(Number.get("5"));
-        // elements6.add(Operator.get("-"));
-        // assertEquals(ex6.getPostfix(), elements6);
+        Expression ex6 = new Expression("(-5)");
+        List<ExpressionElement> elements6 = new ArrayList<ExpressionElement>();
+        elements6.add(Number.get("5"));
+        elements6.add(Operator.get("-"));
+        assertEquals(ex6.getPostfix(), elements6);
     }
 
     @Test
     public void testUnaryOperatorExpressions() {
+
         Expression ex1 = new Expression("-(3+5)");
         List<ExpressionElement> elements1 = new ArrayList<ExpressionElement>();
-        elements1.add(Number.get("-1"));
         elements1.add(Number.get("3"));
         elements1.add(Number.get("5"));
         elements1.add(Operator.get("+"));
-        elements1.add(Operator.get("*"));
+        elements1.add(Operator.get("-"));
         assertEquals(ex1.getPostfix(), elements1);
-
-        // "-(3+5)" --parseElements()--> [-][(][3][+][5][)]
-        // --getPostfix()--> [-1][3][5][+][*] --evaluate()--> [-8]
 
         Expression ex2 = new Expression("-3+5");
         List<ExpressionElement> elements2 = new ArrayList<ExpressionElement>();
-        elements2.add(Number.get("0"));
         elements2.add(Number.get("3"));
         elements2.add(Operator.get("-"));
         elements2.add(Number.get("5"));
         elements2.add(Operator.get("+"));
         assertEquals(ex2.getPostfix(), elements2);
 
-        // "-3^5" --parseElements()--> [-][3][^][5]
-        // 1. --getPostfix()--> [-1][3][5][^][*] --evaluate()--> [-243]
-        // 2. --getSummands()--> 
-
         Expression ex3 = new Expression("-3^5");
         List<ExpressionElement> elements3 = new ArrayList<ExpressionElement>();
-        elements3.add(Number.get("0"));
         elements3.add(Number.get("3"));
         elements3.add(Number.get("5"));
         elements3.add(Operator.get("^"));
         elements3.add(Operator.get("-"));
         assertEquals(ex3.getPostfix(), elements3);
+
+        Expression ex4 = new Expression("+3^5");
+        List<ExpressionElement> elements4 = new ArrayList<ExpressionElement>();
+        elements4.add(Number.get("3"));
+        elements4.add(Number.get("5"));
+        elements4.add(Operator.get("^"));
+        elements4.add(Operator.get("+"));
+        assertEquals(ex4.getPostfix(), elements4);
+
+        Expression ex5 = new Expression("+(3+5)");
+        List<ExpressionElement> elements5 = new ArrayList<ExpressionElement>();
+        elements5.add(Number.get("3"));
+        elements5.add(Number.get("5"));
+        elements5.add(Operator.get("+"));
+        elements5.add(Operator.get("+"));
+        assertEquals(ex5.getPostfix(), elements5);
+
+        Expression ex6 = new Expression("+3");
+        List<ExpressionElement> elements6 = new ArrayList<ExpressionElement>();
+        elements6.add(Number.get("3"));
+        elements6.add(Operator.get("+"));
+        assertEquals(ex6.getPostfix(), elements6);
     }
 
 }

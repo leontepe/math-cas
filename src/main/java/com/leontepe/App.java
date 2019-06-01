@@ -9,6 +9,7 @@ public class App
 {
     public static void main( String[] args )
     {
+        System.out.println("Abc");
         // Expression e1 = new Expression("3x^2-2x+10");
         // Expression ee1 = e1.getSummands().get(1);
         // Expression ee2 = new Expression("-2x");
