@@ -10,7 +10,7 @@ import java.util.Stack;
 public class NotationConverter {
 
     /**
-     * Shunting-yard algorithm: conversion from infix to postfix notation.
+     * Converts an expression element list (i.e. token list) in infix notation to postfix notation.
      * 
      * Example: 3+4*2 => 342*+
      */
