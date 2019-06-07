@@ -47,12 +47,54 @@ public class Node<T> {
     }
 
     /**
-     * Adds a child to this node's list of children.
+     * Adds data as a child to this node.
      * @param child The data of the child to be added.
      */
-    public void addChild(T child) {
+    public Node<T> addChild(T child) {
         Node<T> childNode = new Node<T>(child);
-        childNode.parent = this;
-        this.children.add(new Node<T>(child));
+        return addChild(childNode);
+    }
+
+    /**
+     * Adds a child node to this node.
+     * @param child The node to be added as a child
+     */
+    public Node<T> addChild(Node<T> child) {
+        child.parent = this;
+        this.children.add(child);
+        return child;
+    }
+
+    public void setParent(Node<T> parent) {
+        this.parent = parent;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof Node == false) return false;
+        Node<T> other = (Node<T>)obj;
+        if(isLeaf()) return data.equals(other.data);
+        else return data.equals(other.data) && children.equals(other.getChildren());
+    }
+
+    /**
+     * Prints the node tree.
+     */
+    public void print() {
+        printRecursive("", true);
+    }
+
+    /**
+     * Source: https://stackoverflow.com/a/8948691
+     */
+    private void printRecursive(String prefix, boolean isTail) {
+        System.out.println(prefix + (isTail ? "└── " : "├── ") + data.toString());
+        for (int i = 0; i < children.size() - 1; i++) {
+            children.get(i).printRecursive(prefix + (isTail ? "    " : "│   "), false);
+        }
+        if (children.size() > 0) {
+            children.get(children.size() - 1)
+                    .printRecursive(prefix + (isTail ?"    " : "│   "), true);
+        }
     }
 }

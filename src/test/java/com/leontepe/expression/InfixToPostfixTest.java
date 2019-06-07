@@ -235,7 +235,7 @@ public class InfixToPostfixTest {
         postfix2.add(Operator.get("+"));
         assertEquals(NotationConverter.infixToPostfix(infix2), postfix2);
 
-        Expression ex3 = new Expression("-3^5");
+        //Expression ex3 = new Expression("-3^5");
         List<ExpressionElement> infix3 = new ArrayList<ExpressionElement>();
         infix3.add(Operator.get("-"));
         infix3.add(Number.get("3"));
@@ -293,6 +293,25 @@ public class InfixToPostfixTest {
         postfix7.add(Number.get("3"));
         postfix7.add(Operator.get("-"));
         assertEquals(NotationConverter.infixToPostfix(infix7), postfix7);
+
+
+        
+        // [!] Does this way of handling unary operators always work?
+
+        //Expression ex8 = new Expression("3+(-5)");
+        List<ExpressionElement> infix8 = new ArrayList<ExpressionElement>();
+        infix8.add(Number.get("3"));
+        infix8.add(Operator.get("+"));
+        infix8.add(Paranthesis.get("("));
+        infix8.add(Operator.get("-"));
+        infix8.add(Number.get("5"));
+        infix8.add(Paranthesis.get(")"));
+        List<ExpressionElement> postfix8 = new ArrayList<ExpressionElement>();
+        postfix8.add(Number.get("3"));
+        postfix8.add(Number.get("5"));
+        postfix8.add(Operator.get("-"));
+        postfix8.add(Operator.get("+"));
+        assertEquals(NotationConverter.infixToPostfix(infix8), postfix8);
     }
 
 }
