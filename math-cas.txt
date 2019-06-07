@@ -1,0 +1,18 @@
+MATH-CAS:
+
+AGENDA:
+- [Diese Woche] Support für:
+	1. Klammern
+	2. unäre Operatoren (-, +)
+	3. Kommazahlen
+	4. Funktionen (zB. trig.: sin, cos)
+	5. Konstanten (pi)
+	6. Variablen
+
+- [In ein paar Wochen] Funktionen einbauen:
+	- 2D-Graph
+	- Nullstellen berechnen
+	- Ableiten
+	- "Aufleiten" / Stammfkt. bilden
+	- Extrema (Maximum, Minimum) ausrechnen
+	- Integrale ausrechnen

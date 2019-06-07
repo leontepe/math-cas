@@ -13,4 +13,9 @@ public abstract class ExpressionElement {
         }
         return false;
     }
+
+    @Override
+    public String toString() {
+        return getStringValue();
+    }
 }
