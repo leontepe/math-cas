@@ -4,10 +4,6 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import java.util.List;
-import java.time.chrono.Era;
-import java.util.ArrayList;
-
 import com.leontepe.syntaxtree.*;
 
 public class SyntaxTreeConstructionTest {
@@ -17,6 +13,7 @@ public class SyntaxTreeConstructionTest {
 
         Expression ex1 = new Expression("4+3*2");
         Node<ExpressionElement> actual1 = ex1.getSyntaxTree();
+        
         Node<ExpressionElement> root1 = new Node<ExpressionElement>(Operator.get("+"));
         {
             Node<ExpressionElement> n0 = root1.addChild(Number.get("4"));
@@ -26,6 +23,7 @@ public class SyntaxTreeConstructionTest {
                 Node<ExpressionElement> n11 = n1.addChild(Number.get("2"));
             }
         }
+
         assertEquals(root1, actual1);
 
         Expression ex2 = new Expression("4-2+3-1");

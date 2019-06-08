@@ -1,6 +1,7 @@
 package com.leontepe;
 
 import com.leontepe.expression.Expression;
+import com.leontepe.expression.Operator;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -9,8 +10,14 @@ public class App
 {
     public static void main( String[] args )
     {
-        new Expression("4+3*2").getSyntaxTree().print();
-        new Expression("4-2+3-1").getSyntaxTree().print();
+        // new Expression("4+3*2").getSyntaxTree().print();
+        // new Expression("4-2+3-1").getSyntaxTree().print();
+
+        System.out.println("Hello world");
+
+        for(Operator op : Operator.getOperators()) {
+            System.out.print(op.getStringValue());
+        }
         // Expression e1 = new Expression("3x^2-2x+10");
         // Expression ee1 = e1.getSummands().get(1);
         // Expression ee2 = new Expression("-2x");
