@@ -3,6 +3,7 @@ package com.leontepe.expression;
 
 import java.util.*;
 
+import com.leontepe.expression.Operator.Arity;
 import com.leontepe.expression.Operator.Associativity;
 import com.leontepe.syntaxtree.Node;
 import com.leontepe.NotationConverter;
@@ -14,7 +15,7 @@ public class Expression extends ExpressionElement {
     private Node<ExpressionElement> syntaxTree;
 
     public Expression(String expressionString) {
-        List<ExpressionElement> infix = parseElementList(expressionString);
+        List<ExpressionElement> infix = tokenize(expressionString);
         List<ExpressionElement> postfix = NotationConverter.infixToPostfix(infix);
         this.syntaxTree = constructSyntaxTree(postfix);
     }
@@ -26,60 +27,10 @@ public class Expression extends ExpressionElement {
     
     public Node<ExpressionElement> getSyntaxTree() { return this.syntaxTree; }
     
+    @Override
     public String getStringValue() {
-        String s = "";
-        // for(ExpressionElement el : elements) {
-        //     s += el.getStringValue();
-        // }
-        return s;
-    }
-
-    private static List<ExpressionElement> parseElementList(String s) {
-        s = s.replaceAll("\\s+", "");
-        List<ExpressionElement> elements = new ArrayList<ExpressionElement>();
-        int numberStartIndex = -1;
-
-        for(int i = 0; i < s.length(); i++) {
-            String c = s.substring(i, i+1);
-
-            // if(isSignCharacter(s, i)) {
-            //     elements.add(new Number(0));
-            // }
-            
-            if(numberStartIndex == -1 && Number.isNumberCharacter(c)) {
-                    // start reading number
-                    numberStartIndex = i;
-            }
-            else {
-                if(!Number.isNumberCharacter(c) && numberStartIndex != -1) {
-                    String numberString = s.substring(numberStartIndex, i);
-                    elements.add(Number.get(numberString));
-                    numberStartIndex = -1;
-                }
-                if(Operator.isOperator(c)) {
-                    elements.add(Operator.get(c));
-                }
-                else if(Paranthesis.isParanthesis(c)) {
-                    elements.add(Paranthesis.get(c));
-                }
-                else if(Variable.isVariable(c)) {
-                    if(i > 0) {
-                        String previous = s.substring(i-1, i);
-                        if(Number.isNumberCharacter(previous) || Paranthesis.isRightParanthesis(previous)) {
-                            elements.add(Operator.get("*"));
-                        }
-                    }
-                    elements.add(Variable.get(c));
-                }
-            }
-        }
-        if(numberStartIndex != -1) {
-            String numberString = s.substring(numberStartIndex, s.length());
-            elements.add(Number.get(numberString));
-            numberStartIndex = -1; 
-        }
-
-        return elements;
+        // TODO: Implement; try to fully and exactly reconstruct initial expression string from syntax tree.
+        return "";
     }
 
     /**
@@ -87,8 +38,12 @@ public class Expression extends ExpressionElement {
      */
     private static Node<ExpressionElement> constructSyntaxTree(List<ExpressionElement> postfix) {
 
+        // Intialize node stack
         Stack<Node<ExpressionElement>> nodeStack = new Stack<Node<ExpressionElement>>();
+
+        // Iterate through postfix token list
         for(ExpressionElement el : postfix) {
+
             if(el instanceof Number) {
                 Number number = (Number)el;
                 Node<ExpressionElement> numberNode = new Node<ExpressionElement>(number);
@@ -100,17 +55,29 @@ public class Expression extends ExpressionElement {
                 nodeStack.push(variableNode);
             }
             else if(el instanceof Operator) {
-                Operator operator = (Operator)el;
-                Node<ExpressionElement> operatorNode = new Node<ExpressionElement>(operator);
-                Node<ExpressionElement> operandNode2 = nodeStack.pop();
-                Node<ExpressionElement> operandNode1 = nodeStack.pop();
-                operatorNode.addChild(operandNode1);
-                operatorNode.addChild(operandNode2);
+                // Create operator node
+                Operator op = (Operator)el;
+                Node<ExpressionElement> operatorNode = new Node<ExpressionElement>(op);
+
+                // Respectively pop 1 or 2 operands from stack and add them as children to the operator
+                switch(op.getArity()) {
+                    case UNARY:
+                        Node<ExpressionElement> operandNode = nodeStack.pop();
+                        operatorNode.addChild(operandNode);
+                    case BINARY:
+                        Node<ExpressionElement> operandNode2 = nodeStack.pop();
+                        Node<ExpressionElement> operandNode1 = nodeStack.pop();
+                        operatorNode.addChild(operandNode1);
+                        operatorNode.addChild(operandNode2);
+                }
+
+                // Push operator + operands onto node stack
                 nodeStack.push(operatorNode);
             }
-            else throw new RuntimeException("Token type not caught.");
+            else throw new RuntimeException("Unknown token type");
         }
 
+        // Construction failed if more than one item is left in node stack
         if(nodeStack.size() > 1) {
             throw new RuntimeException("More than one item left in node stack.");
         }
@@ -142,18 +109,6 @@ public class Expression extends ExpressionElement {
     //         throw new ExpressionParsingException("Mismatched parantheses.");
     //     }
     // }
-
-    /**
-     * Determines if a plus/minus character in an expression string is a sign or an operator.
-     */
-    private static boolean isSignCharacter(String s, int i) {
-        return "+-".contains(s.substring(i, i+1)) &&
-        (i == 0 || s.substring(i-1, i).equals(Paranthesis.LEFT_PARANTHESIS.getStringValue()));
-    }
-    
-    // "-3+5" -> [-3][+][5]
-
-
 
     // public Number evaluate() {
 

@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.lang.reflect.*;
 
-public class Operator extends ExpressionElement {
+public abstract class Operator extends ExpressionElement {
 
     /**
      * The number of arguments an operator can take.
@@ -34,8 +34,8 @@ public class Operator extends ExpressionElement {
 
         private IUnaryOperation operation;
 
-        public UnaryOperator(String stringValue, int precedence, Associativity associativity, IUnaryOperation operation) {
-            super(stringValue, precedence, associativity, Arity.UNARY);
+        public UnaryOperator(char operatorChar, int precedence, Associativity associativity, IUnaryOperation operation) {
+            super(operatorChar, precedence, associativity, Arity.UNARY);
             this.operation = operation;
         }
 
@@ -48,8 +48,8 @@ public class Operator extends ExpressionElement {
 
         private IBinaryOperation operation;
 
-        public BinaryOperator(String stringValue, int precedence, Associativity associativity, IBinaryOperation operation) {
-            super(stringValue, precedence, associativity, Arity.BINARY);
+        public BinaryOperator(char operatorChar, int precedence, Associativity associativity, IBinaryOperation operation) {
+            super(operatorChar, precedence, associativity, Arity.BINARY);
             this.operation = operation;
         } 
 
@@ -58,63 +58,57 @@ public class Operator extends ExpressionElement {
         }
     }
 
-    // @SuppressWarnings("serial")
-    // private static final ArrayList<Operator> operators = new ArrayList<Operator>() {{
-    //     add(new Operator("+", 0, Associativity.LEFT, (op1, op2) -> { return new Number(op1.getValue() + op2.getValue()); }));
-    //     add(new Operator("-", 0, Associativity.LEFT, (op1, op2) -> { return new Number(op1.getValue() - op2.getValue()); })); 
-    //     add(new Operator("*", 1, Associativity.LEFT, (op1, op2) -> { return new Number(op1.getValue() * op2.getValue()); }));
-    //     add(new Operator("/", 1, Associativity.LEFT, (op1, op2) -> { return new Number(op1.getValue() / op2.getValue()); }));
-    //     add(new Operator("^", 2, Associativity.RIGHT, (op1, op2) -> { return new Number(Math.pow(op1.getValue(), op2.getValue())); }));
-    // }};
+    public static final BinaryOperator ADD = new BinaryOperator('+', 0, Associativity.LEFT, (op1, op2) -> { return new Number(op1.getValue() + op2.getValue()); });
+    public static final BinaryOperator SUBTRACT = new BinaryOperator('-', 0, Associativity.LEFT, (op1, op2) -> { return new Number(op1.getValue() - op2.getValue()); });
+    public static final BinaryOperator MULTIPLY = new BinaryOperator('*', 1, Associativity.LEFT, (op1, op2) -> { return new Number(op1.getValue() * op2.getValue()); });
+    public static final BinaryOperator DIVIDE = new BinaryOperator('/', 1, Associativity.LEFT, (op1, op2) -> { return new Number(op1.getValue() / op2.getValue()); });
+    public static final BinaryOperator EXPONENTIATE = new BinaryOperator('^', 2, Associativity.RIGHT, (op1, op2) -> { return new Number(Math.pow(op1.getValue(), op2.getValue())); });
 
-    public static final BinaryOperator ADD = new BinaryOperator("+", 0, Associativity.LEFT, (op1, op2) -> { return new Number(op1.getValue() + op2.getValue()); });
-    public static final BinaryOperator SUBTRACT = new BinaryOperator("-", 0, Associativity.LEFT, (op1, op2) -> { return new Number(op1.getValue() - op2.getValue()); });
-    public static final BinaryOperator MULTIPLY = new BinaryOperator("*", 1, Associativity.LEFT, (op1, op2) -> { return new Number(op1.getValue() * op2.getValue()); });
-    public static final BinaryOperator DIVIDE = new BinaryOperator("/", 1, Associativity.LEFT, (op1, op2) -> { return new Number(op1.getValue() / op2.getValue()); });
-    public static final BinaryOperator EXPONENTIATE = new BinaryOperator("^", 2, Associativity.RIGHT, (op1, op2) -> { return new Number(Math.pow(op1.getValue(), op2.getValue())); });
+    public static final UnaryOperator NEGATE = new UnaryOperator('-', 0, Associativity.LEFT, (op) -> { return new Number(-op.getValue()); });
+    public static final UnaryOperator UNARY_PLUS = new UnaryOperator('+', 0, Associativity.LEFT, (op) -> { return new Number(op.getValue()); });
 
-    public static final UnaryOperator NEGATE = new UnaryOperator("-", 0, Associativity.LEFT, (op) -> { return new Number(-op.getValue()); });
-    public static final UnaryOperator UNARY_PLUS = new UnaryOperator("+", 0, Associativity.LEFT, (op) -> { return new Number(op.getValue()); });
-
-    private String stringValue;
+    private char operatorChar;
     private int precedence;
     private Associativity associativity;
     private Arity arity;
 
-    private Operator(String stringValue, int precedence, Associativity associativity, Arity arity) {
-        this.stringValue = stringValue;
+    private Operator(char operatorChar, int precedence, Associativity associativity, Arity arity) {
+        this.operatorChar = operatorChar;
         this.precedence = precedence;
         this.associativity = associativity;
         this.arity = arity;
     }
 
-    public String getStringValue() { return this.stringValue; }
+    public char getOperatorChar() { return this.operatorChar; }
     public int getPrecedence() { return this.precedence; }
     public Associativity getAssociativity() { return this.associativity; }
+    public Arity getArity() { return this.arity; }
 
-    public static Operator get(String s) {
-        Operator op = getOperator(s);
-        if(op != null) return op;
-        else throw new IllegalArgumentException();
-    }
-
-    private static Operator getOperator(String s) {
-        Operator operator = null;
-        for(Operator op : operators) {
-            if(op.getStringValue().equals(s)) {
-                operator = op;
+    public static Operator get(char c, Arity arity) {
+        List<Operator> ops = getOperators(arity);
+        for(Operator op : ops) {
+            if(op.getOperatorChar() == c) {
+                return op;
             }
         }
-        return operator;
+        return null;
     }
 
     public static List<Operator> getOperators() {
+        return getOperators(null);
+    }
+
+    public static List<Operator> getOperators(Arity arity) {
         // List<Field> fields = Arrays.stream(Operator.class.getFields()).collect(Collectors.toList());
         List<Operator> operators = new ArrayList<Operator>();
         for(Field f : Operator.class.getFields()) {
             try {
-                if(Operator.class.isAssignableFrom(f.get(null).getClass())) {
-                    operators.add((Operator)f.get(null));
+                Object possibleOperator = f.get(null);
+                if(Operator.class.isAssignableFrom(possibleOperator.getClass())) {
+                    Operator op = (Operator)possibleOperator;
+                    if(arity == null || op.getArity() == arity) {
+                        operators.add(op);
+                    }
                 }
             }
             catch (IllegalAccessException e) {
@@ -124,16 +118,20 @@ public class Operator extends ExpressionElement {
         return operators;
     }
 
-    public static boolean isOperator(String s) {
-        return getOperator(s) != null;
+    public static boolean isOperator(char c) {
+        return get(c, null) != null;
     }
+
+    @Override
+    public String getStringValue() { return String.valueOf(this.operatorChar); }
 
     @Override
     public boolean equals(Object obj) {
         if(obj instanceof Operator) {
             Operator op = (Operator)obj;
-            return op.getStringValue().equals(this.stringValue);
+            return op.getArity() == this.arity && op.getOperatorChar() == operatorChar;
         }
         return false;
     }
+    
 }

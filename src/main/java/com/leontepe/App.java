@@ -6,6 +6,9 @@ import com.leontepe.expression.Operator;
 import java.util.List;
 import java.util.ArrayList;
 
+import com.leontepe.expression.ExpressionElement;
+import com.leontepe.expression.ExpressionTokenizer;
+
 public class App
 {
     public static void main( String[] args )
@@ -17,6 +20,12 @@ public class App
 
         for(Operator op : Operator.getOperators()) {
             System.out.print(op.getStringValue());
+        }
+
+        String exString1 = "12-5*18";
+        List<ExpressionElement> actual1 = ExpressionTokenizer.tokenize(exString1);
+        for(ExpressionElement el : actual1) {
+            System.out.println(el.getStringValue());
         }
         // Expression e1 = new Expression("3x^2-2x+10");
         // Expression ee1 = e1.getSummands().get(1);

@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
+import com.leontepe.expression.Operator.Arity;
 import com.leontepe.syntaxtree.*;
 
 public class SyntaxTreeConstructionTest {
@@ -14,10 +15,10 @@ public class SyntaxTreeConstructionTest {
         Expression ex1 = new Expression("4+3*2");
         Node<ExpressionElement> actual1 = ex1.getSyntaxTree();
         
-        Node<ExpressionElement> root1 = new Node<ExpressionElement>(Operator.get("+"));
+        Node<ExpressionElement> root1 = new Node<ExpressionElement>(Operator.ADD);
         {
             Node<ExpressionElement> n0 = root1.addChild(Number.get("4"));
-            Node<ExpressionElement> n1 = root1.addChild(Operator.get("*"));
+            Node<ExpressionElement> n1 = root1.addChild(Operator.MULTIPLY);
             {
                 Node<ExpressionElement> n10 = n1.addChild(Number.get("3"));
                 Node<ExpressionElement> n11 = n1.addChild(Number.get("2"));
@@ -29,11 +30,11 @@ public class SyntaxTreeConstructionTest {
         Expression ex2 = new Expression("4-2+3-1");
         Node<ExpressionElement> actual2 = ex2.getSyntaxTree();
         
-        Node<ExpressionElement> root2 = new Node<ExpressionElement>(Operator.get("-"));
+        Node<ExpressionElement> root2 = new Node<ExpressionElement>(Operator.SUBTRACT);
         {
-            Node<ExpressionElement> n0 = root2.addChild(Operator.get("+"));
+            Node<ExpressionElement> n0 = root2.addChild(Operator.ADD);
             {
-                Node<ExpressionElement> n00 = n0.addChild(Operator.get("-"));
+                Node<ExpressionElement> n00 = n0.addChild(Operator.SUBTRACT);
                 {
                     Node<ExpressionElement> n000 = n00.addChild(Number.get("4"));
                     Node<ExpressionElement> n001 = n00.addChild(Number.get("2"));
@@ -51,10 +52,10 @@ public class SyntaxTreeConstructionTest {
 
         Expression ex4 = new Expression("2^2^3");
         Node<ExpressionElement> actual4 = ex4.getSyntaxTree();
-        Node<ExpressionElement> root4 = new Node<ExpressionElement>(Operator.get("^"));
+        Node<ExpressionElement> root4 = new Node<ExpressionElement>(Operator.EXPONENTIATE);
         {
             Node<ExpressionElement> n0 = root4.addChild(Number.get("2"));
-            Node<ExpressionElement> n1 = root4.addChild(Operator.get("^"));
+            Node<ExpressionElement> n1 = root4.addChild(Operator.EXPONENTIATE);
             {
                 Node<ExpressionElement> n10 = n1.addChild(Number.get("2"));
                 Node<ExpressionElement> n11 = n1.addChild(Number.get("3"));
@@ -67,9 +68,9 @@ public class SyntaxTreeConstructionTest {
     public void testParanthesisExpressions() {
         Expression ex1 = new Expression("(4+3)*2");
         Node<ExpressionElement> actual1 = ex1.getSyntaxTree();
-        Node<ExpressionElement> root1 = new Node<ExpressionElement>(Operator.get("*"));
+        Node<ExpressionElement> root1 = new Node<ExpressionElement>(Operator.MULTIPLY);
         {
-            Node<ExpressionElement> n0 = root1.addChild(Operator.get("+"));
+            Node<ExpressionElement> n0 = root1.addChild(Operator.ADD);
             {
                 Node<ExpressionElement> n00 = n0.addChild(Number.get("4"));
                 Node<ExpressionElement> n01 = n0.addChild(Number.get("3"));
@@ -80,15 +81,15 @@ public class SyntaxTreeConstructionTest {
 
         Expression ex2 = new Expression("3+(4*(6-3))/2");
         Node<ExpressionElement> actual2 = ex2.getSyntaxTree();
-        Node<ExpressionElement> root2 = new Node<ExpressionElement>(Operator.get("+"));
+        Node<ExpressionElement> root2 = new Node<ExpressionElement>(Operator.ADD);
         {
             Node<ExpressionElement> n0 = root2.addChild(Number.get("3"));
-            Node<ExpressionElement> n1 = root2.addChild(Operator.get("/"));
+            Node<ExpressionElement> n1 = root2.addChild(Operator.DIVIDE);
             {
-                Node<ExpressionElement> n10 = n1.addChild(Operator.get("*"));
+                Node<ExpressionElement> n10 = n1.addChild(Operator.MULTIPLY);
                 {
                     Node<ExpressionElement> n100 = n10.addChild(Number.get("4"));
-                    Node<ExpressionElement> n101 = n10.addChild(Operator.get("-"));
+                    Node<ExpressionElement> n101 = n10.addChild(Operator.SUBTRACT);
                     {
                         Node<ExpressionElement> n1010 = n101.addChild(Number.get("6"));
                         Node<ExpressionElement> n1011 = n101.addChild(Number.get("3"));
@@ -105,7 +106,7 @@ public class SyntaxTreeConstructionTest {
 
         Expression ex1 = new Expression("2.422*1.5");
         Node<ExpressionElement> actual1 = ex1.getSyntaxTree();
-        Node<ExpressionElement> root1 = new Node<ExpressionElement>(Operator.get("*"));
+        Node<ExpressionElement> root1 = new Node<ExpressionElement>(Operator.MULTIPLY);
         {
             Node<ExpressionElement> n0 = root1.addChild(Number.get("2.422"));
             Node<ExpressionElement> n1 = root1.addChild(Number.get("1.5"));
@@ -114,7 +115,7 @@ public class SyntaxTreeConstructionTest {
 
         Expression ex2 = new Expression("0.0001 * 10000.0");
         Node<ExpressionElement> actual2 = ex2.getSyntaxTree();
-        Node<ExpressionElement> root2 = new Node<ExpressionElement>(Operator.get("*"));
+        Node<ExpressionElement> root2 = new Node<ExpressionElement>(Operator.MULTIPLY);
         {
             Node<ExpressionElement> n0 = root2.addChild(Number.get("0.0001"));
             Node<ExpressionElement> n1 = root2.addChild(Number.get("10000.0"));

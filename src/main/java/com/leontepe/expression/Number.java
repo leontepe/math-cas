@@ -11,20 +11,6 @@ public class Number extends ExpressionElement {
         this.value = value;
     }
 
-    public static Number get(String s) {
-        try {
-            return new Number(Double.parseDouble(s));
-        }
-        catch(NumberFormatException e) {
-            throw new IllegalArgumentException();
-        }
-    }
-
-    public static boolean isNumberCharacter(String s) {
-        if(s.length() > 1) throw new IllegalArgumentException();
-        return Character.isDigit(s.charAt(0)) || s.charAt(0) == DECIMAL_SEPARATOR;
-    }
-
     public boolean isInteger() {
         return value == Math.floor(value) && !Double.isInfinite(value);
     }
@@ -36,7 +22,12 @@ public class Number extends ExpressionElement {
     public double getValue() {
         return this.value;
     }
+
+    public void flipSign() {
+        this.value = -this.value;
+    }
     
+    @Override
     public String getStringValue() {
         if(isInteger()) {
             return Integer.toString((int)value);
@@ -55,9 +46,17 @@ public class Number extends ExpressionElement {
         return false;
     }
 
-    public void flipSign() {
-        this.value = -this.value;
+    public static Number get(String s) {
+        try {
+            return new Number(Double.parseDouble(s));
+        }
+        catch(NumberFormatException e) {
+            throw new IllegalArgumentException();
+        }
     }
 
+    public static boolean isNumberCharacter(char c) {
+        return Character.isDigit(c) || c == DECIMAL_SEPARATOR;
+    }
 
 }
