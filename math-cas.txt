@@ -3,7 +3,10 @@ MATH-CAS:
 a ^ -b
 -a^b
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 9b0f3cafbae53d7cf2aced34438b693bf9149648
 AGENDA:
 - [Diese Woche] Support f�r:
 	[x] 1. Grundlagen (Grundrechenarten, Präzedenz)
