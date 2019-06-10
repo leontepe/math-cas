@@ -6,7 +6,6 @@ import java.util.*;
 import com.leontepe.expression.Operator.Arity;
 import com.leontepe.expression.Operator.Associativity;
 import com.leontepe.syntaxtree.Node;
-import com.leontepe.NotationConverter;
 import com.leontepe.exception.EvaluationException;
 import com.leontepe.exception.ExpressionParsingException;
 
@@ -55,15 +54,15 @@ public class Expression extends ExpressionElement {
                 Node<ExpressionElement> operatorNode = new Node<ExpressionElement>(op);
 
                 // Respectively pop 1 or 2 operands from stack and add them as children to the operator
-                switch(op.getArity()) {
-                    case UNARY:
-                        Node<ExpressionElement> operandNode = nodeStack.pop();
-                        operatorNode.addChild(operandNode);
-                    case BINARY:
-                        Node<ExpressionElement> operandNode2 = nodeStack.pop();
-                        Node<ExpressionElement> operandNode1 = nodeStack.pop();
-                        operatorNode.addChild(operandNode1);
-                        operatorNode.addChild(operandNode2);
+                if(op.getArity() == Arity.UNARY) {
+                    Node<ExpressionElement> operandNode = nodeStack.pop();
+                    operatorNode.addChild(operandNode);
+                }
+                else if(op.getArity() == Arity.BINARY) {
+                    Node<ExpressionElement> operandNode2 = nodeStack.pop();
+                    Node<ExpressionElement> operandNode1 = nodeStack.pop();
+                    operatorNode.addChild(operandNode1);
+                    operatorNode.addChild(operandNode2);
                 }
 
                 // Push operator + operands onto node stack

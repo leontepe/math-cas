@@ -70,8 +70,8 @@ public abstract class Operator extends ExpressionElement {
     public static final BinaryOperator DIVIDE = new BinaryOperator('/', 1, Associativity.LEFT, (op1, op2) -> { return new Number(op1.getValue() / op2.getValue()); });
     public static final BinaryOperator EXPONENTIATE = new BinaryOperator('^', 2, Associativity.RIGHT, (op1, op2) -> { return new Number(Math.pow(op1.getValue(), op2.getValue())); });
 
-    public static final UnaryOperator NEGATE = new UnaryOperator('-', 0, (op) -> { return new Number(-op.getValue()); });
-    public static final UnaryOperator UNARY_PLUS = new UnaryOperator('+', 0, (op) -> { return new Number(op.getValue()); });
+    public static final UnaryOperator NEGATE = new UnaryOperator('-', 2, (op) -> { return new Number(-op.getValue()); });
+    public static final UnaryOperator UNARY_PLUS = new UnaryOperator('+', 2, (op) -> { return new Number(op.getValue()); });
 
     private char operatorChar;
     private int precedence;

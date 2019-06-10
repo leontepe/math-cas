@@ -7,7 +7,7 @@ AGENDA:
 - [Diese Woche] Support f�r:
 	[x] 1. Grundlagen (Grundrechenarten, Präzedenz)
 	[x] 2. Klammern
-	[.] 3. un�re Operatoren (-, +)
+	[x] 3. un�re Operatoren (-, +)
 	[x] 4. Kommazahlen
 	[ ] 5. Implizite Multiplikation
 	[ ] 6. Funktionen (zB. trig.: sin, cos)

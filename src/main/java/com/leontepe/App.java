@@ -16,17 +16,10 @@ public class App
         // new Expression("4+3*2").getSyntaxTree().print();
         // new Expression("4-2+3-1").getSyntaxTree().print();
 
-        System.out.println("Hello world");
 
-        for(Operator op : Operator.getOperators()) {
-            System.out.print(op.getStringValue());
-        }
+        Expression ex1 = new Expression("a---b");
+        ex1.getSyntaxTree().print();
 
-        String exString1 = "12-5*18";
-        List<ExpressionElement> actual1 = ExpressionTokenizer.tokenize(exString1);
-        for(ExpressionElement el : actual1) {
-            System.out.println(el.getStringValue());
-        }
         // Expression e1 = new Expression("3x^2-2x+10");
         // Expression ee1 = e1.getSummands().get(1);
         // Expression ee2 = new Expression("-2x");

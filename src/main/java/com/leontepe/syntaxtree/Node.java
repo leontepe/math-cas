@@ -71,10 +71,12 @@ public class Node<T> {
 
     @Override
     public boolean equals(Object obj) {
-        if(obj instanceof Node == false) return false;
-        Node<T> other = (Node<T>)obj;
-        if(isLeaf()) return data.equals(other.data);
-        else return data.equals(other.data) && children.equals(other.getChildren());
+        if(obj instanceof Node) {
+            Node<T> other = (Node<T>)obj;
+            if(isLeaf()) return data.equals(other.data);
+            else return data.equals(other.data) && children.equals(other.getChildren());
+        }
+        return false;
     }
 
     /**

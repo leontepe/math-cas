@@ -1,10 +1,7 @@
-package com.leontepe;
+package com.leontepe.expression;
 
-import com.leontepe.expression.*;
-import com.leontepe.expression.Number;
 import com.leontepe.expression.Operator.Arity;
 import com.leontepe.expression.Operator.BinaryOperator;
-import com.leontepe.expression.Operator.UnaryOperator;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -43,14 +40,6 @@ public class NotationConverter {
         for(ExpressionElement el : infix) {
             if(el instanceof Operator) {
                 Operator currentOperator = (Operator)el;
-                // 2 * 3 + 4
-                // 23*4+
-
-                // -2^3
-                // 23^-
-
-                // 2^-3
-                // 23-^
 
                 // Pop operators on stack with higher precedence
                 while(mustPopStack(operatorStack, currentOperator))
@@ -91,33 +80,21 @@ public class NotationConverter {
 
         return postfix;
     }
-
-    // Unary operators = highest precedence?
-    // Unary operators should not pop binary ones (true?)
-    // Can binary operators pop unary ones?
-    //
-    // a^-b --> ab-^
-    // -a^b --> ab^-
-    // 
+    
     private static boolean mustPopStack(Stack<ExpressionElement> opStack, Operator currentOp) {
         if(!opStack.isEmpty() && opStack.peek() != Parenthesis.LEFT_PARENTHESIS) {
             Operator peekOp = (Operator) opStack.peek();
-            if(peekOp.getArity() == Arity.UNARY) {
-                UnaryOperator peekOpUnary = (UnaryOperator)peekOp;
-                if(currentOp.getArity() == Arity.UNARY && peekOpUnary.getPrecedence() > currentOp.getPrecedence()) {
-                    return true;
-                }
+            // Pop if precedence is higher
+            if(peekOp.getPrecedence() > currentOp.getPrecedence()) {
+                return true;
             }
             else if(peekOp.getArity() == Arity.BINARY) {
                 BinaryOperator peekOpBinary = (BinaryOperator)peekOp;
-                if(peekOpBinary.getPrecedence() > currentOp.getPrecedence() ||
-                    (peekOpBinary.getPrecedence() == currentOp.getPrecedence() &&
-                    peekOpBinary.getAssociativity() == Operator.Associativity.LEFT)) {
+                if((peekOpBinary.getPrecedence() == currentOp.getPrecedence() &&
+                peekOpBinary.getAssociativity() == Operator.Associativity.LEFT)) {
                     return true;
                 }
             }
-
-
         }
         return false;
     }
