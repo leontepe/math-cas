@@ -5,21 +5,20 @@ import java.util.*;
 
 import com.leontepe.expression.Operator.Arity;
 import com.leontepe.expression.Operator.Associativity;
-import com.leontepe.syntaxtree.Node;
 import com.leontepe.exception.EvaluationException;
 import com.leontepe.exception.ExpressionParsingException;
 
 public class Expression extends ExpressionElement {
     
-    private Node<ExpressionElement> syntaxTree;
+    private SyntaxTreeNode syntaxTreeRoot;
 
     public Expression(String expressionString) {
         List<ExpressionElement> infix = ExpressionTokenizer.tokenize(expressionString);
         List<ExpressionElement> postfix = NotationConverter.infixToPostfix(infix);
-        this.syntaxTree = constructSyntaxTree(postfix);
+        this.syntaxTreeRoot = constructSyntaxTree(postfix);
     }
     
-    public Node<ExpressionElement> getSyntaxTree() { return this.syntaxTree; }
+    public SyntaxTreeNode getSyntaxTree() { return this.syntaxTreeRoot; }
     
     @Override
     public String getStringValue() {
@@ -30,37 +29,37 @@ public class Expression extends ExpressionElement {
     /**
      * Constructs a syntax tree from a postfix token list.
      */
-    private static Node<ExpressionElement> constructSyntaxTree(List<ExpressionElement> postfix) {
+    private static SyntaxTreeNode constructSyntaxTree(List<ExpressionElement> postfix) {
 
         // Intialize node stack
-        Stack<Node<ExpressionElement>> nodeStack = new Stack<Node<ExpressionElement>>();
+        Stack<SyntaxTreeNode> nodeStack = new Stack<SyntaxTreeNode>();
 
         // Iterate through postfix token list
         for(ExpressionElement el : postfix) {
 
             if(el instanceof Number) {
                 Number number = (Number)el;
-                Node<ExpressionElement> numberNode = new Node<ExpressionElement>(number);
+                SyntaxTreeNode numberNode = new SyntaxTreeNode(number);
                 nodeStack.push(numberNode);
             }
             else if(el instanceof Variable) {
                 Variable variable = (Variable)el;
-                Node<ExpressionElement> variableNode = new Node<ExpressionElement>(variable);
+                SyntaxTreeNode variableNode = new SyntaxTreeNode(variable);
                 nodeStack.push(variableNode);
             }
             else if(el instanceof Operator) {
                 // Create operator node
                 Operator op = (Operator)el;
-                Node<ExpressionElement> operatorNode = new Node<ExpressionElement>(op);
+                SyntaxTreeNode operatorNode = new SyntaxTreeNode(op);
 
                 // Respectively pop 1 or 2 operands from stack and add them as children to the operator
                 if(op.getArity() == Arity.UNARY) {
-                    Node<ExpressionElement> operandNode = nodeStack.pop();
+                    SyntaxTreeNode operandNode = nodeStack.pop();
                     operatorNode.addChild(operandNode);
                 }
                 else if(op.getArity() == Arity.BINARY) {
-                    Node<ExpressionElement> operandNode2 = nodeStack.pop();
-                    Node<ExpressionElement> operandNode1 = nodeStack.pop();
+                    SyntaxTreeNode operandNode2 = nodeStack.pop();
+                    SyntaxTreeNode operandNode1 = nodeStack.pop();
                     operatorNode.addChild(operandNode1);
                     operatorNode.addChild(operandNode2);
                 }
@@ -104,30 +103,15 @@ public class Expression extends ExpressionElement {
     //     }
     // }
 
-    // public Number evaluate() {
+    public Number evaluate() {
 
-    //     // cannot evaluate expressions with variables
-    //     if(getVariables().size() > 0) {
-    //         throw new EvaluationException();
-    //     }
+        // cannot evaluate expressions with variables
+        // if(getVariables().size() > 0) {
+        //     throw new EvaluationException();
+        // }
 
-    //     Stack<Number> numberStack = new Stack<Number>();
-    //     List<ExpressionElement> postfix = getPostfix();
-    //     for(ExpressionElement el : postfix) {
-    //         if(el instanceof Number) {
-    //             Number number = (Number)el;
-    //             numberStack.push(number);
-    //         }
-    //         else if(el instanceof Operator) {
-    //             Operator operator = (Operator)el;
-    //             Number operand2 = numberStack.pop();
-    //             Number operand1 = numberStack.pop();
-    //             numberStack.push(operator.operate(operand1, operand2));
-    //         }
-    //         else throw new EvaluationException();
-    //     }
-    //     return numberStack.firstElement();
-    // }
+        return syntaxTreeRoot.evaluate();
+    }
 
     // public List<Variable> getVariables() {
     //     List<Variable> variables = new ArrayList<Variable>();
@@ -139,22 +123,14 @@ public class Expression extends ExpressionElement {
     //     return variables;
     // }
 
-    // public void printElements() {
-    //     int i = 0;
-    //     for(ExpressionElement el : elements) {
-    //         System.out.print("{" + el.getStringValue() + "}");
-    //     }
-    //     System.out.println();
-    // }
-
-    // @Override
-    // public boolean equals(Object obj) {
-    //     if(obj instanceof Expression) {
-    //         Expression ex = (Expression)obj;
-    //         return ex.getElements().equals(this.elements);
-    //     }
-    //     return false;
-    // }
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof Expression) {
+            Expression ex = (Expression)obj;
+            return ex.getSyntaxTree().equals(this.syntaxTreeRoot);
+        }
+        return false;
+    }
 
     // public Expression substitute(Variable variable, Number number) {
     //     for(ExpressionElement el : elements) {
