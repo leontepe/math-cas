@@ -19,7 +19,7 @@ public abstract class Operator extends ExpressionElement {
     }
 
     public enum Associativity {
-        LEFT, RIGHT, NONE
+        LEFT, RIGHT
     }
 
     public interface IUnaryOperation {
@@ -34,8 +34,8 @@ public abstract class Operator extends ExpressionElement {
 
         private IUnaryOperation operation;
 
-        public UnaryOperator(char operatorChar, int precedence, Associativity associativity, IUnaryOperation operation) {
-            super(operatorChar, precedence, associativity, Arity.UNARY);
+        public UnaryOperator(char operatorChar, int precedence, IUnaryOperation operation) {
+            super(operatorChar, precedence, Arity.UNARY);
             this.operation = operation;
         }
 
@@ -47,11 +47,17 @@ public abstract class Operator extends ExpressionElement {
     public static class BinaryOperator extends Operator {
 
         private IBinaryOperation operation;
+        private Associativity associativity;
 
         public BinaryOperator(char operatorChar, int precedence, Associativity associativity, IBinaryOperation operation) {
-            super(operatorChar, precedence, associativity, Arity.BINARY);
+            super(operatorChar, precedence, Arity.BINARY);
+            this.associativity = associativity;
             this.operation = operation;
-        } 
+        }
+
+        public Associativity getAssociativity() {
+            return this.associativity;
+        }
 
         public Number operate(Number op1, Number op2) {
             return this.operation.perform(op1, op2);
@@ -64,24 +70,21 @@ public abstract class Operator extends ExpressionElement {
     public static final BinaryOperator DIVIDE = new BinaryOperator('/', 1, Associativity.LEFT, (op1, op2) -> { return new Number(op1.getValue() / op2.getValue()); });
     public static final BinaryOperator EXPONENTIATE = new BinaryOperator('^', 2, Associativity.RIGHT, (op1, op2) -> { return new Number(Math.pow(op1.getValue(), op2.getValue())); });
 
-    public static final UnaryOperator NEGATE = new UnaryOperator('-', 0, Associativity.LEFT, (op) -> { return new Number(-op.getValue()); });
-    public static final UnaryOperator UNARY_PLUS = new UnaryOperator('+', 0, Associativity.LEFT, (op) -> { return new Number(op.getValue()); });
+    public static final UnaryOperator NEGATE = new UnaryOperator('-', 0, (op) -> { return new Number(-op.getValue()); });
+    public static final UnaryOperator UNARY_PLUS = new UnaryOperator('+', 0, (op) -> { return new Number(op.getValue()); });
 
     private char operatorChar;
     private int precedence;
-    private Associativity associativity;
     private Arity arity;
 
-    private Operator(char operatorChar, int precedence, Associativity associativity, Arity arity) {
+    private Operator(char operatorChar, int precedence, Arity arity) {
         this.operatorChar = operatorChar;
         this.precedence = precedence;
-        this.associativity = associativity;
         this.arity = arity;
     }
 
     public char getOperatorChar() { return this.operatorChar; }
     public int getPrecedence() { return this.precedence; }
-    public Associativity getAssociativity() { return this.associativity; }
     public Arity getArity() { return this.arity; }
 
     public static Operator get(char c, Arity arity) {

@@ -15,12 +15,7 @@ public class Expression extends ExpressionElement {
     private Node<ExpressionElement> syntaxTree;
 
     public Expression(String expressionString) {
-        List<ExpressionElement> infix = tokenize(expressionString);
-        List<ExpressionElement> postfix = NotationConverter.infixToPostfix(infix);
-        this.syntaxTree = constructSyntaxTree(postfix);
-    }
-
-    public Expression(List<ExpressionElement> infix) {
+        List<ExpressionElement> infix = ExpressionTokenizer.tokenize(expressionString);
         List<ExpressionElement> postfix = NotationConverter.infixToPostfix(infix);
         this.syntaxTree = constructSyntaxTree(postfix);
     }
@@ -79,7 +74,7 @@ public class Expression extends ExpressionElement {
 
         // Construction failed if more than one item is left in node stack
         if(nodeStack.size() > 1) {
-            throw new RuntimeException("More than one item left in node stack.");
+            throw new RuntimeException("More than one item left in node stack");
         }
 
         return nodeStack.pop();

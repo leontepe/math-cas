@@ -22,3 +22,11 @@ AGENDA:
 	- "Aufleiten" / Stammfkt. bilden
 	- Extrema (Maximum, Minimum) ausrechnen
 	- Integrale ausrechnen
+
+
+Design decisions:
+- When expression is ambiguous, force user to place parentheses instead of defaulting to one option.
+	Example: a/b!
+			= (a/b)!
+			OR a/(b!)
+		
