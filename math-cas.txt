@@ -7,7 +7,7 @@ AGENDA:
 - [Diese Woche] Support f�r:
 	[x] 1. Grundlagen (Grundrechenarten, Präzedenz)
 	[x] 2. Klammern
-	[x] 3. un�re Operatoren (-, +)
+	[x] 3. unaere Operatoren (-, +)
 	[x] 4. Kommazahlen
 	[ ] 5. Implizite Multiplikation
 	[ ] 6. Funktionen (zB. trig.: sin, cos)
@@ -23,10 +23,14 @@ AGENDA:
 	- Extrema (Maximum, Minimum) ausrechnen
 	- Integrale ausrechnen
 
+- Vektorrechnung
+	- Rechenarten
+	- Ebenen
+	- Parameterdarstellung
 
 Design decisions:
 - When expression is ambiguous, force user to place parentheses instead of defaulting to one option.
 	Example: a/b!
 			= (a/b)!
 			OR a/(b!)
-		
+			BUT I would say it should be a/(b!) because ! has higher precedence than /

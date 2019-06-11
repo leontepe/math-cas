@@ -17,8 +17,7 @@ public class App
         // new Expression("4-2+3-1").getSyntaxTree().print();
 
 
-        Expression ex1 = new Expression("a---b");
-        ex1.getSyntaxTree().print();
+        new Expression(".005-((-12+13)^12*3.005)").evaluate().print();
 
         // Expression e1 = new Expression("3x^2-2x+10");
         // Expression ee1 = e1.getSummands().get(1);

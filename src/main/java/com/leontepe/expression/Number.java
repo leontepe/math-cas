@@ -11,6 +11,8 @@ public class Number extends ExpressionElement {
         this.value = value;
     }
 
+    public double getValue() { return this.value; }
+
     public boolean isInteger() {
         return value == Math.floor(value) && !Double.isInfinite(value);
     }
@@ -19,12 +21,12 @@ public class Number extends ExpressionElement {
         return value % 2 == 0;
     }
 
-    public double getValue() {
-        return this.value;
-    }
-
     public void flipSign() {
         this.value = -this.value;
+    }
+
+    public void print() {
+        System.out.println(value);
     }
     
     @Override
@@ -41,7 +43,7 @@ public class Number extends ExpressionElement {
     public boolean equals(Object obj) {
         if(obj instanceof Number) {
             Number number = (Number)obj;
-            return number.getValue() == this.value;
+            return number.value == this.value;
         }
         return false;
     }
