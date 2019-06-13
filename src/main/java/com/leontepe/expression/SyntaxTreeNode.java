@@ -20,7 +20,7 @@ import java.util.LinkedList;
  * @param <T> The type of node data to be stored
  */
 
-public class SyntaxTreeNode {
+public class SyntaxTreeNode implements Cloneable {
     private ExpressionElement expressionElement;
     private SyntaxTreeNode parent;
     private List<SyntaxTreeNode> children;
@@ -30,9 +30,18 @@ public class SyntaxTreeNode {
         this.children = new LinkedList<SyntaxTreeNode>();
     }
 
+    private SyntaxTreeNode(ExpressionElement expressionElement, List<SyntaxTreeNode> children) {
+        this.expressionElement = expressionElement;
+        this.children = children;
+    }
+
     /** @return The data that this node stores. */
     public ExpressionElement getExpressionElement() {
         return this.expressionElement;
+    }
+
+    public void setExpressionElement(ExpressionElement el) {
+        this.expressionElement = el;
     }
 
     /** @return The parent of this node. If the node is a root node, returns {@code null}. */
@@ -74,11 +83,28 @@ public class SyntaxTreeNode {
         return child;
     }
 
+    public boolean removeChild(SyntaxTreeNode child) {
+        if(children.remove(child)) {
+            child.parent = null;
+            return true;
+        }
+        return false;
+    }
+
+    public SyntaxTreeNode remove(int index) {
+        SyntaxTreeNode child = getChildren().get(index);
+        removeChild(child);
+        return child;
+    }
+
     public void setParent(SyntaxTreeNode parent) {
         this.parent = parent;
     }
 
     @Override
+    /**
+     * Syntax trees only equal each other, if they are exactly identical. If the order of the children is somehow different, the trees are not equal anymore. If you are looking for mathematical equality, use the equals-method in Expression.
+     */
     public boolean equals(Object obj) {
         if(obj instanceof SyntaxTreeNode) {
             SyntaxTreeNode other = (SyntaxTreeNode)obj;
@@ -86,6 +112,11 @@ public class SyntaxTreeNode {
             else return expressionElement.equals(other.expressionElement) && children.equals(other.getChildren());
         }
         return false;
+    }
+
+    @Override
+    public SyntaxTreeNode clone() {
+        return new SyntaxTreeNode(expressionElement, new LinkedList<SyntaxTreeNode>(children));
     }
 
     /**

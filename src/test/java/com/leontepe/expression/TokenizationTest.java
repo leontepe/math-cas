@@ -63,7 +63,7 @@ public class TokenizationTest {
 
     @Test
     public void testDecimalExpressions() {
-        // TODO
+        
     }
 
     @Test
@@ -101,5 +101,12 @@ public class TokenizationTest {
         expected3.add(Operator.NEGATE);
         expected3.add(new Number(3));
         assertEquals(expected3, actual3);
+    }
+
+    @Test
+    public void testFunctionExpressions() {
+        String exString1 = "sin(12)";
+        String exString2 = "cos(3)";
+        String exString3 = "-tan(-5)";
     }
 }

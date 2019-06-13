@@ -1,11 +1,8 @@
 
 package com.leontepe.expression;
 
-import java.io.ObjectInputStream.GetField;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.lang.reflect.*;
 
 public abstract class Operator extends ExpressionElement {

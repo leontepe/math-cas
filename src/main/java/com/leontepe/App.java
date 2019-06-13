@@ -2,57 +2,65 @@ package com.leontepe;
 
 import com.leontepe.expression.Expression;
 import com.leontepe.expression.Operator;
+import com.leontepe.expression.SyntaxTreeConstructor;
+import com.leontepe.expression.SyntaxTreeNode;
 
 import java.util.List;
 import java.util.ArrayList;
 
 import com.leontepe.expression.ExpressionElement;
 import com.leontepe.expression.ExpressionTokenizer;
+import com.leontepe.expression.NotationConverter;
+import com.leontepe.expression.Number;
 
-public class App
-{
-    public static void main( String[] args )
-    {
+public class App {
+    public static void main(String[] args) {
         // new Expression("4+3*2").getSyntaxTree().print();
         // new Expression("4-2+3-1").getSyntaxTree().print();
 
+        new Expression("0.005-((-12+13)^12*3.005)").getSyntaxTree().print();
 
-        new Expression(".005-((-12+13)^12*3.005)").evaluate().print();
-
-        // Expression e1 = new Expression("3x^2-2x+10");
-        // Expression ee1 = e1.getSummands().get(1);
-        // Expression ee2 = new Expression("-2x");
-        // ee1.printElements();
-        // ee2.printElements();
-        // System.out.println(ee1.evaluate().getStringValue());
-
-        // // Print is-elements
-        // Expression e1 = new Expression("-2x^2 + 1/2*x - 10");
-        // List<Expression> summands = e1.getSummands();
-        // for(Expression e : summands) {
-        //     e.printElements();
+        // System.out.println("2+3*(2-4)");
+        // List<ExpressionElement> postfix1 =
+        // NotationConverter.infixToPostfix(ExpressionTokenizer.tokenize("2+3*(2-4)"));
+        // System.out.println();
+        // for(ExpressionElement el : postfix1) {
+        // System.out.print("[" + el.toString() + "]");
         // }
         // System.out.println();
 
-        // // Print should-elements
-        // List<Expression> expressions1 = new ArrayList<Expression>();
-        // expressions1.add(new Expression("-2x^2"));
-        // expressions1.add(new Expression("1/2*x"));
-        // expressions1.add(new Expression("-10"));
-        // for(Expression e : expressions1) {
-        //     e.printElements();
+        // System.out.println();
+        // System.out.println();
+
+        // System.out.println("0.005-((-12+13)^12*3.005)");
+
+        // List<ExpressionElement> els = Expression.deconstruct(new Expression("(3+4)*2").getSyntaxTree());
+        // for(ExpressionElement el : els) {
+        //     System.out.print("[" + el.toString() + "]");
+        // }
+
+        String expected4 = "-(-5+3)/2*12+3^(-3*4)";
+        String actual4 = new Expression(expected4).toString();
+        System.out.println(actual4);
+        // List<ExpressionElement> postfix =
+        // NotationConverter.infixToPostfix(ExpressionTokenizer.tokenize("0.005-((-12+13)^12*3.005)"));
+        // System.out.println();
+        // for(ExpressionElement el : postfix) {
+        // System.out.print("[" + el.toString() + "]");
         // }
         // System.out.println();
 
-        // // Assure same list size
-        // System.out.println(summands.size());
-        // System.out.println(expressions1.size());
-
-        // System.out.println(summands.get(0).getElements().size());
-
-        // // Print element-wise equality
-        // for(int i = 0; i < summands.size(); i++) {
-        //     System.out.println(summands.get(i).equals(expressions1.get(i)));
+        // SyntaxTreeNode node = new SyntaxTreeNode(Operator.MULTIPLY);
+        // {
+        //     SyntaxTreeNode n0 = node.addChild(new Number(2));
+        //     SyntaxTreeNode n1 = node.addChild(new Number(3));
+        //     SyntaxTreeNode n2 = node.addChild(new Number(4));
+        //     SyntaxTreeNode n3 = node.addChild(new Number(5));
         // }
+
+        // node.print();
+        // System.out.println("AFTER");
+        // SyntaxTreeConstructor.expand(node).print();
+        // node.print();
     }
 }

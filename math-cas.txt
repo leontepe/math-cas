@@ -34,3 +34,27 @@ Design decisions:
 			= (a/b)!
 			OR a/(b!)
 			BUT I would say it should be a/(b!) because ! has higher precedence than /
+
+KOMPLETTE PRODUKT IDEE:
+Im Gegensatz zu den meisten anderen CA-Systemen eine besonders inuitive und realitätsnahe Notation,
+um leicht algebraische Umformungen durchzuführen und nachvollziehen zu können. Während der Hauptfokus
+von vielen anderen Mathe-Lernsoftwares die Graphischen Teile der Mathematik sind, ist die von diesem
+Produkt die Algebra. Man soll so mehr oder weniger "spielerisch" die algebraischen Optionen der Umformung
+ausprobieren können, ohne das lange Schreiben und die lästigen Schreibfehler o.ä., die ggf. beim Lernen 
+stören. So werden die Blockaden bei diesem schwierigen Teil der Mathematik so gering wie möglich gemacht,
+um das Mathe-Lernen so einfach wie möglich zu machen.
+
+Außerdem sollte man die Möglichkeit haben, sich den richtigen Lösungsweg mit richtiger Notation einer Aufgabe
+anzeigen zu lassen.
+
+Logische Gruppen farbig markieren beim Hovern
+
+Umformungen:
+- Ausmultiplizieren (Produkt von Klammerausdruck und Zahl, Produkt von mehreren Klammerausdrücken)
+- Ausklammern
+- nahrhafte Ergänzung (plus irgendwas minus irgendwas)
+- Rechenoperation auf beiden Seiten einer Gleichung
+
+
+
+MATHE DIGITALISIEREN (BILDUNG)

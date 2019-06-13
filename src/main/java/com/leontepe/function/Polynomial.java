@@ -8,12 +8,10 @@ public class Polynomial extends Function {
     // }
 
     // public static boolean isPolynomial(Function f) {
-    //     // TODO: Implement
     //     return false;
     // }
 
     // public int getDegree() {
-    //     // TODO: Implement
     //     return 0;
     // }
 }
