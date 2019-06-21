@@ -9,10 +9,11 @@ AGENDA:
 	[x] 2. Klammern
 	[x] 3. unaere Operatoren (-, +)
 	[x] 4. Kommazahlen
-	[ ] 5. Implizite Multiplikation
-	[ ] 6. Funktionen (zB. trig.: sin, cos)
-	[ ] 7. Konstanten (z.B. pi)
-	[ ] 8. Variablen
+	[x] 5. Variablen
+	[ ] 6. Griechische Buchstaben/Variablen
+	[ ] 6. Implizite Multiplikation
+	[ ] 7. Funktionen (zB. trig.: sin, cos)
+	[ ] 8. Konstanten (z.B. pi, e)
 	[ ] 9. Fakultät
 
 - [In ein paar Wochen] Funktionen einbauen:
@@ -34,6 +35,14 @@ Design decisions:
 			= (a/b)!
 			OR a/(b!)
 			BUT I would say it should be a/(b!) because ! has higher precedence than /
+
+- as per convention, variables should be italicized
+
+- since the formatted output will need to be different than the raw string anyway, use a set of internal tokens to get rid of ambiguity
+	(but this does not solve the problem as to whether f(x) is a multiplication or a function definition)
+
+- assumption: algebra is always about equations
+
 
 KOMPLETTE PRODUKT IDEE:
 Im Gegensatz zu den meisten anderen CA-Systemen eine besonders inuitive und realitätsnahe Notation,
@@ -58,3 +67,39 @@ Umformungen:
 
 
 MATHE DIGITALISIEREN (BILDUNG)
+
+--PROBLEM FUNKTIONEN--
+
+Die gesamte Infrastruktur soll so generell wie möglich sein, damit ich eine gute Grundlage habe, auf der ich dann das Projekt ohne alles umzustrukturieren
+erweitern kann. Aber andererseits muss ich mich darauf fokussieren, auch vorwärts zu kommen. Ich bin im Moment dabei darüber nachzudenken, wie ich die
+Funktionen einbauen werde und bin dabei auf ein Interpretationsproblem eines Ausdrucks gekommen. Wenn man in irgendeinem Ausdruck nun f(x) stehen hat, woher
+weiß ich, dass damit die Funktion f(x) gemeint ist und nicht eine implizite Multiplikation zwischen den Variablen f und x? So wie ich das momentan sehe,
+kann man das theoretisch nicht genau sagen. f(x) = 5x^2-5 könnte auch als ganz normale Gleichung angesehen werden, bei der f(x) bzw. f mal x auf der linken
+Seite steht. Wenn eine interne Darstellung der Gleichung bereits besteht, weiß ich natürlich schon ob es eine Funktion ist oder nicht, da ich sie als ein solches
+Funktions-Objekt darstellen würde.
+Aber was genau wäre überhaupt ein Funktionsobjekt? Genau genommen ist es nämlich keine direkte Funktionsdefinition, sondern vielmehr ein Aufruf mit der Variable
+oder den Variablen. Wohin führt mich das?
+
+Dafür will ich mir ein Beispiel angucken:
+f(x, y) = -(1/5)x^2 + 2y
+a = 5
+b = 2
+f(a,b) =
+f(a,b) = ... (konkreter Wert)
+
+Und noch ein Beispiel:
+f(x,y) = 2x - 3y
+f(a,b) =
+f(a,b) = 2a - 3b
+
+Ich vermute, dass die Bedeutung der Ausdrücke also immer von dem mathematischen Kontext (definierte Variablen, definierte Funktionen) abhängen. In dem ersten Beispiel weiß ich,
+dass die Funktion f bereits definiert ist und es sich bei dem Ausrück f(a,b) grundsätzlich um einen Aufruf und nicht um eine Definition handelt. Dann weiß ich anhand der beiden
+Parameter, a und b, dass es sich um eine komplette Berechnung handeln muss, da alle unbekannten bereits einen Wert zugewiesen bekommen haben. Und ich denke, dass man in solchen
+mathematischen Kontexten den Wert von einer Variable innerhalb eines Kontextes auch nicht ändert. Wenn es in einem Problem eine Variable gibt, und diese einen Wert bekommt, so 
+bleibt dieser für das Problem bestehen. Sobald sich die Voraussetzungen (d.h. u.a. die Werte der Variablen) ändern, handelt es sich um ein neues Problem, und somit um einen
+neuen mathematischen Kontext.
+Was also ist ein mathematischer Kontext? Ein mathematischer Kontext enthält alle bereits definierten Variablen und Funktionen. Außerdem könnte man auch von einem Standard-Kontext
+reden, der "vordefinierte" Funktionen wie die trigonometrischen (sin, cos etc.) oder mathematische Konstanten (z.B. Pi) enthält. Von diesem Standard-Kontext könnten dann neu
+erstelle Kontexte erben, sofern sie nicht aus irgendeinem Grund Funktionsbeschreiber wie "sin" neu definieren wollen (was aufgrund der mehreren Buchstaben erst einmal gar nicht
+möglich sein soll). Dieser mathematische Kontext ist dann das grundlegendste Objekt. Bevor man ein Gleichung oder einen Ausdruck erstellen kann, muss erst der mathematische Kontext
+dafür gegeben sein.

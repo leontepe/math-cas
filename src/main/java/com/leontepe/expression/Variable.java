@@ -4,6 +4,7 @@ package com.leontepe.expression;
 public class Variable extends ExpressionElement {
 
     private char variableChar;
+    private Number value;
 
     public Variable(char variableChar) {
         this.variableChar = variableChar;
@@ -11,6 +12,14 @@ public class Variable extends ExpressionElement {
 
     public char getVariableChar() {
         return this.variableChar;
+    }
+
+    public Number getValue() {
+        return this.value;
+    }
+
+    public void setValue(Number number) {
+        this.value = number;
     }
 
     public static boolean isVariable(char c) {

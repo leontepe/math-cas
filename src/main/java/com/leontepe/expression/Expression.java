@@ -56,6 +56,24 @@ public class Expression extends ExpressionElement {
         return false;
     }
 
+
+    // this should technically have a binary syntax tree as input, so assume it is binary
+    private static void equalize(SyntaxTreeNode node) {
+
+    }
+
+    private static SyntaxTreeNode transformNegatives(SyntaxTreeNode node) {
+        if()
+    }
+    
+    private static SyntaxTreeNode levelOperators() {
+        
+    }
+
+    private static SyntaxTreeNode simplifyRationals() {
+        
+    }
+
     // public Expression substitute(Variable variable, Number number);
     // public List<Expression> getSummands();
     // public boolean contains(ExpressionElement el);

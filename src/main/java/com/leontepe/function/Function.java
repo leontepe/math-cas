@@ -1,10 +1,63 @@
 
 package com.leontepe.function;
 
+import com.leontepe.exception.FunctionException;
 import com.leontepe.expression.*;
 import com.leontepe.expression.Number;
 
-public class Function {
+public abstract class Function {
+
+    private String functionName;
+    private Expression functionExpression;
+    private int arity;
+
+    public Function(String functionName, Expression functExpression, int arity) {
+        this.functionName = functionName;
+        this.functionExpression = functionExpression;
+
+        // This might be the only attribute that a function MUST have
+        this.arity = arity;
+    }
+
+    /**
+     * Gets the function name (e.g. f, sin, ln). Optional, as not every function has an explicit name (y = 3x; x -> x^2).
+     */
+    public String getFunctionName() {
+        return functionName;
+    }
+
+    /**
+     * Gets expression defining this function. Optional, as not every function can be represented as an expression (e.g. trig. functions)
+     */
+    public Expression getFunctionExpression() {
+        return functionExpression;
+    }
+
+    /**
+     * Gets the arity (i.e. number of arguments) of this function. Cannot be negative.
+     */
+    public int getArity() {
+        return arity;
+    }
+
+    /**
+     * Applies this function to the input arguments.
+     * @param arguments
+     * @return
+     */
+    public Number apply(Number[] arguments) {
+        if(arguments.length != arity) {
+            throw new FunctionException("Number of arguments does not equal arity of function");
+        }
+
+        // does this belong here?
+        if(functionExpression != null) {
+            // substitute variables in expression for the argument numbers
+            // evaluate expression
+            // return result
+        }
+        return null;
+    }
 
     // private String functionString;
     // private Expression expression;

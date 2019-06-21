@@ -1,7 +1,10 @@
 
 package com.leontepe.function;
 
-public class Polynomial extends Function {
+/**
+ * Deutsch: Ganzrationale Funktion
+ */
+public class PolynomialFunction extends Function {
 
     // public Polynomial(String functionString) {
     //     super(functionString);
