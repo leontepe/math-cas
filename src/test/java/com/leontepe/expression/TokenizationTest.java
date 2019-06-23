@@ -5,6 +5,9 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 import java.util.List;
+
+import com.leontepe.function.TrigonometricFunction;
+
 import java.util.ArrayList;
 
 public class TokenizationTest {
@@ -153,7 +156,27 @@ public class TokenizationTest {
     @Test
     public void testFunctionExpressions() {
         String exString1 = "sin(12)";
-        String exString2 = "cos(3)";
+        List<ExpressionElement> actual1 = ExpressionTokenizer.tokenize(exString1);
+        List<ExpressionElement> expected1 = new ArrayList<ExpressionElement>();
+        expected1.add(TrigonometricFunction.SINE);
+        expected1.add(Parenthesis.LEFT_PARENTHESIS);
+        expected1.add(new Number(12));
+        expected1.add(Parenthesis.RIGHT_PARENTHESIS);
+        assertEquals(expected1, actual1);
+
+        String exString2 = "-cos(-3)+4";
+        List<ExpressionElement> actual2 = ExpressionTokenizer.tokenize(exString2);
+        List<ExpressionElement> expected2 = new ArrayList<ExpressionElement>();
+        expected2.add(Operator.NEGATE);
+        expected2.add(TrigonometricFunction.COSINE);
+        expected2.add(Parenthesis.LEFT_PARENTHESIS);
+        expected2.add(Operator.NEGATE);
+        expected2.add(new Number(3));
+        expected2.add(Parenthesis.RIGHT_PARENTHESIS);
+        expected2.add(Operator.ADD);
+        expected2.add(new Number(4));
+        assertEquals(expected2, actual2);
+
         String exString3 = "-tan(-5)";
         
         // This should be valid:

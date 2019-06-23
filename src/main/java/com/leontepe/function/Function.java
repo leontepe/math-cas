@@ -5,13 +5,13 @@ import com.leontepe.exception.FunctionException;
 import com.leontepe.expression.*;
 import com.leontepe.expression.Number;
 
-public abstract class Function {
+public abstract class Function extends ExpressionElement {
 
     private String functionName;
     private Expression functionExpression;
     private int arity;
 
-    public Function(String functionName, Expression functExpression, int arity) {
+    public Function(String functionName, Expression functionExpression, int arity) {
         this.functionName = functionName;
         this.functionExpression = functionExpression;
 
@@ -57,6 +57,11 @@ public abstract class Function {
             // return result
         }
         return null;
+    }
+
+    @Override
+    public String getStringValue() {
+        return getFunctionName();
     }
 
     // private String functionString;

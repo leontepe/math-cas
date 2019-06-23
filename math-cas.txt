@@ -10,11 +10,12 @@ AGENDA:
 	[x] 3. unaere Operatoren (-, +)
 	[x] 4. Kommazahlen
 	[x] 5. Variablen
-	[ ] 6. Griechische Buchstaben/Variablen
-	[ ] 6. Implizite Multiplikation
-	[ ] 7. Funktionen (zB. trig.: sin, cos)
-	[ ] 8. Konstanten (z.B. pi, e)
-	[ ] 9. Fakultät
+	[.] 6. Vordefinierte Funktionen (zB. trig.: sin, cos)
+	[.] 7. Vordefinierte Konstanten (z.B. pi, e)
+	[ ] 8. Implizite Multiplikation
+	[ ] 9. eigendefinierte Funktionen (f(x) = ...)
+	[ ] 10. Griechische Buchstaben/Variablen 
+	[ ] 11. Fakultät
 
 - [In ein paar Wochen] Funktionen einbauen:
 	- 2D-Graph

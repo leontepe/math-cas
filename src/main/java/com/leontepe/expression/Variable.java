@@ -7,6 +7,7 @@ public class Variable extends ExpressionElement {
     private Number value;
 
     public Variable(char variableChar) {
+        if(!isVariable(variableChar)) throw new IllegalArgumentException();
         this.variableChar = variableChar;
     }
 
@@ -24,11 +25,6 @@ public class Variable extends ExpressionElement {
 
     public static boolean isVariable(char c) {
         return Character.isLetter(c);
-    }
-
-    public static Variable get(char c) {
-        if(!isVariable(c)) throw new IllegalArgumentException();
-        else return new Variable(c);
     }
 
     @Override

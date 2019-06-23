@@ -2,6 +2,7 @@ package com.leontepe.expression;
 
 import com.leontepe.expression.Operator.Arity;
 import com.leontepe.expression.Operator.BinaryOperator;
+import com.leontepe.function.Function;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -48,6 +49,10 @@ public class NotationConverter {
                 }
                 operatorStack.push(currentOperator);
             }
+            else if(el instanceof Function) {
+                Function f = (Function)el;
+                operatorStack.push(f);
+            }
             else if(el instanceof Parenthesis) {
                 Parenthesis par = (Parenthesis)el;
                 if(par == Parenthesis.LEFT_PARENTHESIS) {
@@ -62,13 +67,13 @@ public class NotationConverter {
                 }
                 
             }
-            else if(el instanceof Number) {
-                Number num = (Number)el;
-                postfix.add(num);
-            }
             else if(el instanceof Variable) {
                 Variable var = (Variable)el;
                 postfix.add(var);
+            }
+            else if(el instanceof Number) {
+                Number num = (Number)el;
+                postfix.add(num);
             }
         }
 

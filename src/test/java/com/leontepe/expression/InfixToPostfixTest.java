@@ -6,6 +6,8 @@ import static org.junit.Assert.assertEquals;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.leontepe.function.TrigonometricFunction;
+
 import org.junit.Test;
 
 public class InfixToPostfixTest {
@@ -356,6 +358,72 @@ public class InfixToPostfixTest {
         postfix12.add(new Number(2));
         postfix12.add(Operator.DIVIDE);
         assertEquals(NotationConverter.infixToPostfix(infix12), postfix12);
+    }
+
+    @Test
+    public void testPredefinedFunctionExpressions() {
+        // Expression ex1 = new Expression("sin(3)");
+        List<ExpressionElement> infix1 = new ArrayList<ExpressionElement>();
+        infix1.add(TrigonometricFunction.SINE);
+        infix1.add(Parenthesis.LEFT_PARENTHESIS);
+        infix1.add(new Number(3));
+        infix1.add(Parenthesis.RIGHT_PARENTHESIS);
+        List<ExpressionElement> postfix1 = new ArrayList<ExpressionElement>();
+        postfix1.add(new Number(3));
+        postfix1.add(TrigonometricFunction.SINE);
+        assertEquals(NotationConverter.infixToPostfix(infix1), postfix1);
+
+        // Expression ex1 = new Expression("3*sin(2+4)");
+        List<ExpressionElement> infix2 = new ArrayList<ExpressionElement>();
+        infix2.add(new Number(3));
+        infix2.add(Operator.MULTIPLY);
+        infix2.add(TrigonometricFunction.SINE);
+        infix2.add(Parenthesis.LEFT_PARENTHESIS);
+        infix2.add(new Number(2));
+        infix2.add(Operator.ADD);
+        infix2.add(new Number(4));
+        infix2.add(Parenthesis.RIGHT_PARENTHESIS);
+        List<ExpressionElement> postfix2 = new ArrayList<ExpressionElement>();
+        postfix2.add(new Number(3));
+        postfix2.add(new Number(2));
+        postfix2.add(new Number(4));
+        postfix2.add(Operator.ADD);
+        postfix2.add(TrigonometricFunction.SINE);
+        postfix2.add(Operator.MULTIPLY);
+        assertEquals(NotationConverter.infixToPostfix(infix2), postfix2);
+
+        // Expression ex1 = new Expression("0.5/cos(-sin(4+(-12)) - 52.4)");
+        List<ExpressionElement> infix3 = new ArrayList<ExpressionElement>();
+        infix3.add(new Number(0.5));
+        infix3.add(Operator.DIVIDE);
+        infix3.add(TrigonometricFunction.COSINE);
+        infix3.add(Parenthesis.LEFT_PARENTHESIS);
+        infix3.add(Operator.NEGATE);
+        infix3.add(TrigonometricFunction.SINE);
+        infix3.add(Parenthesis.LEFT_PARENTHESIS);
+        infix3.add(new Number(4));
+        infix3.add(Operator.ADD);
+        infix3.add(Parenthesis.LEFT_PARENTHESIS);
+        infix3.add(Operator.NEGATE);
+        infix3.add(new Number(12));
+        infix3.add(Parenthesis.RIGHT_PARENTHESIS);
+        infix3.add(Parenthesis.RIGHT_PARENTHESIS);
+        infix3.add(Operator.SUBTRACT);
+        infix3.add(new Number(52.4));
+        infix3.add(Parenthesis.RIGHT_PARENTHESIS);
+        List<ExpressionElement> postfix3 = new ArrayList<ExpressionElement>();
+        postfix3.add(new Number(0.5));
+        postfix3.add(new Number(4));
+        postfix3.add(new Number(12));
+        postfix3.add(Operator.NEGATE);
+        postfix3.add(Operator.ADD);
+        postfix3.add(TrigonometricFunction.SINE);
+        postfix3.add(Operator.NEGATE);
+        postfix3.add(new Number(52.4));
+        postfix3.add(Operator.SUBTRACT);
+        postfix3.add(TrigonometricFunction.COSINE);
+        postfix3.add(Operator.DIVIDE);
+        assertEquals(NotationConverter.infixToPostfix(infix3), postfix3);
     }
 
 }

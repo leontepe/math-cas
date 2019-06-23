@@ -32,6 +32,32 @@ public class MathContext {
         return definedFunctions;
     }
 
+    public Function getFunction(String functionName) {
+        for(Function f : definedFunctions) {
+            if(f.getFunctionName().equals(functionName)) {
+                return f;
+            }
+        }
+        return null;
+    }
+
+    public boolean containsFunction(String functionName) {
+        return getFunction(functionName) != null;
+    }
+
+    public Variable getVariable(char variableChar) {
+        for(Variable v : definedVariables) {
+            if(v.getVariableChar() == variableChar) {
+                return v;
+            }
+        }
+        return null;
+    }
+
+    public boolean containsVariable(char variableChar) {
+        return getVariable(variableChar) != null;
+    }
+
     public void loadTrigonometricFunctions() {
         definedFunctions.addAll(TrigonometricFunction.getAllTrigonometricFunctions());
     }
