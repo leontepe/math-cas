@@ -1,6 +1,7 @@
 
 package com.leontepe;
 
+import com.leontepe.exception.MathContextException;
 import com.leontepe.expression.*;
 import com.leontepe.function.Function;
 import com.leontepe.function.LogarithmicFunction;
@@ -11,12 +12,12 @@ import java.util.List;
 
 public class MathContext {
 
-    private List<Variable> definedVariables;
-    private List<Function> definedFunctions;
+    private List<Variable> declaredVariables;
+    private List<Function> declaredFunctions;
 
     public MathContext() {
-        this.definedFunctions = new ArrayList<Function>();
-        this.definedVariables = new ArrayList<Variable>();
+        this.declaredFunctions = new ArrayList<Function>();
+        this.declaredVariables = new ArrayList<Variable>();
 
         // Load standard functions and constants into context
         loadTrigonometricFunctions();
@@ -25,15 +26,15 @@ public class MathContext {
     }
 
     public List<Variable> getDefinedVariables() {
-        return definedVariables;
+        return declaredVariables;
     }
 
     public List<Function> getDefinedFunctions() {
-        return definedFunctions;
+        return declaredFunctions;
     }
 
     public Function getFunction(String functionName) {
-        for(Function f : definedFunctions) {
+        for(Function f : declaredFunctions) {
             if(f.getFunctionName().equals(functionName)) {
                 return f;
             }
@@ -46,8 +47,8 @@ public class MathContext {
     }
 
     public Variable getVariable(char variableChar) {
-        for(Variable v : definedVariables) {
-            if(v.getVariableChar() == variableChar) {
+        for(Variable v : declaredVariables) {
+            if(v.getChar() == variableChar) {
                 return v;
             }
         }
@@ -58,15 +59,24 @@ public class MathContext {
         return getVariable(variableChar) != null;
     }
 
+    public void addVariable(Variable var) {
+        if (!containsVariable(var.getChar())) {
+            declaredVariables.add(var);
+        }
+        else {
+            throw new MathContextException("Variable to be added is already declared");
+        }
+    }
+
     public void loadTrigonometricFunctions() {
-        definedFunctions.addAll(TrigonometricFunction.getAllTrigonometricFunctions());
+        declaredFunctions.addAll(TrigonometricFunction.getAllTrigonometricFunctions());
     }
 
     public void loadLogarithmicFunctions() {
-        definedFunctions.addAll(LogarithmicFunction.getAllLogarithmicFunctions());
+        declaredFunctions.addAll(LogarithmicFunction.getAllLogarithmicFunctions());
     }
 
     public void loadConstants() {
-        definedVariables.addAll(Constant.getAllConstants());
+        declaredVariables.addAll(Constant.getAllConstants());
     }
 }

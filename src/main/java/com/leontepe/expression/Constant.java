@@ -7,9 +7,8 @@ import java.util.List;
 
 public class Constant extends Variable {
 
-    public Constant(char variableChar, Number number) {
-        super(variableChar);
-        setValue(number);
+    public Constant(char constantChar, Number value) {
+        super(constantChar, value);
     }
 
     public static Constant PI = new Constant('\u03c0', new Number(Math.PI));

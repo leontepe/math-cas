@@ -1,8 +1,5 @@
 MATH-CAS:
 
-a ^ -b
--a^b
-
 AGENDA:
 - [Diese Woche] Support f�r:
 	[x] 1. Grundlagen (Grundrechenarten, Präzedenz)
@@ -30,7 +27,7 @@ AGENDA:
 	- Ebenen
 	- Parameterdarstellung
 
-Design decisions:
+DESIGN DECISIONS:
 - When expression is ambiguous, force user to place parentheses instead of defaulting to one option.
 	Example: a/b!
 			= (a/b)!

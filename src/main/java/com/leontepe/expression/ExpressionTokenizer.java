@@ -41,19 +41,27 @@ public class ExpressionTokenizer {
             }
             else {
                 // Check if number reading should end
-                if (!Number.isNumberCharacter(c) && numberReadingStart != -1) {
+                if (numberReadingStart != -1 && !Number.isNumberCharacter(c)) {
                     String numberString = expressionString.substring(numberReadingStart, i);
                     elements.add(Number.get(numberString));
                     numberReadingStart = -1;
                 }
                 // Check if letter reading should end
-                if(!Character.isLetter(c) && letterReadingStart != -1) {
+                if(letterReadingStart != -1 && !Character.isLetter(c)) {
                     String letterString = expressionString.substring(letterReadingStart, i);
                     if(context.containsFunction(letterString)) {
                         elements.add(context.getFunction(letterString));
                     }
-                    else if(letterString.length() == 1 && context.containsVariable(letterString.charAt(0))) {
-                        elements.add(context.getVariable(letterString.charAt(0)));
+                    else if(letterString.length() == 1) {
+                        char varChar = letterString.charAt(0);
+                        if (context.containsVariable(varChar)) {
+                            elements.add(context.getVariable(varChar));
+                        }
+                        else {
+                            Variable var = new Variable(varChar);
+                            elements.add(var);
+                            context.addVariable(var);
+                        }
                     }
                     letterReadingStart = -1;
                 }
@@ -67,7 +75,7 @@ public class ExpressionTokenizer {
                         if (previousToken instanceof Number || previousToken instanceof Variable
                                 || previousToken.equals(Parenthesis.RIGHT_PARENTHESIS)) {
                             elements.add(Operator.get(c, Operator.Arity.BINARY));
-                        } else if (previousToken instanceof Operator
+                        } else if (previousToken instanceof Operator 
                                 || previousToken.equals(Parenthesis.LEFT_PARENTHESIS)) {
                             elements.add(Operator.get(c, Operator.Arity.UNARY));
                         } else if (previousToken instanceof Function) {
@@ -87,6 +95,24 @@ public class ExpressionTokenizer {
             String numberString = expressionString.substring(numberReadingStart, expressionString.length());
             elements.add(Number.get(numberString));
             numberReadingStart = -1;
+        }
+        else if (letterReadingStart != -1) {
+            String letterString = expressionString.substring(letterReadingStart, expressionString.length());
+            if(context.containsFunction(letterString)) {
+                elements.add(context.getFunction(letterString));
+            }
+            else if(letterString.length() == 1) {
+                char varChar = letterString.charAt(0);
+                if (context.containsVariable(varChar)) {
+                    elements.add(context.getVariable(varChar));
+                }
+                else {
+                    Variable var = new Variable(varChar);
+                    elements.add(var);
+                    context.addVariable(var);
+                }
+            }
+            letterReadingStart = -1;
         }
 
         return elements;

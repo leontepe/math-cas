@@ -177,7 +177,31 @@ public class TokenizationTest {
         expected2.add(new Number(4));
         assertEquals(expected2, actual2);
 
-        String exString3 = "-tan(-5)";
+        String exString3 = "tan(-sin(-5)+(-12/3)+csc(1))";
+        List<ExpressionElement> actual3 = ExpressionTokenizer.tokenize(exString3);
+        List<ExpressionElement> expected3 = new ArrayList<ExpressionElement>();
+        expected3.add(TrigonometricFunction.TANGENT);
+        expected3.add(Parenthesis.LEFT_PARENTHESIS);
+        expected3.add(Operator.NEGATE);
+        expected3.add(TrigonometricFunction.SINE);
+        expected3.add(Parenthesis.LEFT_PARENTHESIS);
+        expected3.add(Operator.NEGATE);
+        expected3.add(new Number(5));
+        expected3.add(Parenthesis.RIGHT_PARENTHESIS);
+        expected3.add(Operator.ADD);
+        expected3.add(Parenthesis.LEFT_PARENTHESIS);
+        expected3.add(Operator.NEGATE);
+        expected3.add(new Number(12));
+        expected3.add(Operator.DIVIDE);
+        expected3.add(new Number(3));
+        expected3.add(Parenthesis.RIGHT_PARENTHESIS);
+        expected3.add(Operator.ADD);
+        expected3.add(TrigonometricFunction.COSECANT);
+        expected3.add(Parenthesis.LEFT_PARENTHESIS);
+        expected3.add(new Number(1));
+        expected3.add(Parenthesis.RIGHT_PARENTHESIS);
+        expected3.add(Parenthesis.RIGHT_PARENTHESIS);
+        assertEquals(expected3, actual3);
         
         // This should be valid:
         // ex1 = f(3, 2) + 15 * 3
@@ -198,5 +222,45 @@ public class TokenizationTest {
         // it should in principle be read anyway, as the expression as such is valid and syntax tree construction
         // would be possible from the original expression string, the information just gets lost by converting it to
         // postfix, and this shouldn't happen, so find a workaround
+    }
+
+    @Test
+    public void testConstantExpressions() {
+        String exString1 = "3*e+e";
+        List<ExpressionElement> actual1 = ExpressionTokenizer.tokenize(exString1);
+        List<ExpressionElement> expected1 = new ArrayList<ExpressionElement>();
+        expected1.add(new Number(3));
+        expected1.add(Operator.MULTIPLY);
+        expected1.add(Constant.E);
+        expected1.add(Operator.ADD);
+        expected1.add(Constant.E);
+        assertEquals(expected1, actual1);
+
+        String exString2 = "e*(3-4*e)";
+        List<ExpressionElement> actual2 = ExpressionTokenizer.tokenize(exString2);
+        List<ExpressionElement> expected2 = new ArrayList<ExpressionElement>();
+        expected2.add(Constant.E);
+        expected2.add(Operator.MULTIPLY);
+        expected2.add(Parenthesis.LEFT_PARENTHESIS);
+        expected2.add(new Number(3));
+        expected2.add(Operator.SUBTRACT);
+        expected2.add(new Number(4));
+        expected2.add(Operator.MULTIPLY);
+        expected2.add(Constant.E);
+        expected2.add(Parenthesis.RIGHT_PARENTHESIS);
+        assertEquals(expected2, actual2);
+
+        String exString3 = "-11^e-0.5*e";
+        List<ExpressionElement> actual3 = ExpressionTokenizer.tokenize(exString3);
+        List<ExpressionElement> expected3 = new ArrayList<ExpressionElement>();
+        expected3.add(Operator.NEGATE);
+        expected3.add(new Number(11));
+        expected3.add(Operator.EXPONENTIATE);
+        expected3.add(Constant.E);
+        expected3.add(Operator.SUBTRACT);
+        expected3.add(new Number(0.5));
+        expected3.add(Operator.MULTIPLY);
+        expected3.add(Constant.E);
+        assertEquals(expected3, actual3);
     }
 }
