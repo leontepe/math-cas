@@ -123,21 +123,26 @@ public class SyntaxTreeNode implements Cloneable {
      * Prints the node tree.
      */
     public void print() {
-        printRecursive("", true);
+        System.out.print(toString());
     }
 
     /**
      * Source: https://stackoverflow.com/a/8948691
      */
-    private void printRecursive(String prefix, boolean isTail) {
-        System.out.println(prefix + (isTail ? "└── " : "├── ") + expressionElement.toString());
+    private String toStringRecursive(String prefix, boolean isTail) {
+        String s = prefix + (isTail ? "└── " : "├── ") + expressionElement.toString() + System.lineSeparator();
         for (int i = 0; i < children.size() - 1; i++) {
-            children.get(i).printRecursive(prefix + (isTail ? "    " : "│   "), false);
+            s += children.get(i).toStringRecursive(prefix + (isTail ? "    " : "│   "), false);
         }
         if (children.size() > 0) {
-            children.get(children.size() - 1)
-                    .printRecursive(prefix + (isTail ?"    " : "│   "), true);
+            s += children.get(children.size() - 1).toStringRecursive(prefix + (isTail ? "    " : "│   "), true);
         }
+        return s;
+    }
+
+    @Override
+    public String toString() {
+        return System.lineSeparator() + toStringRecursive("", true);
     }
 
     public Number evaluate() {

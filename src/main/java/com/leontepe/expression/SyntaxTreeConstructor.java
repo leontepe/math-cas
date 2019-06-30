@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Stack;
 
 import com.leontepe.expression.Operator.Arity;
+import com.leontepe.function.Function;
 
 public class SyntaxTreeConstructor {
 
@@ -49,7 +50,15 @@ public class SyntaxTreeConstructor {
                 // Push operator + operands onto node stack
                 nodeStack.push(operatorNode);
             }
-            else throw new RuntimeException("Unknown token type");
+            else if (el instanceof Function) {
+                Function f = (Function) el;
+                SyntaxTreeNode functionNode = new SyntaxTreeNode(f);
+                int arity = f.getArity();
+                for (int i = arity - 1; i >= 0; i++) {
+                    functionNode.addChild(nodeStack.pop());
+                }
+                nodeStack.push(functionNode);            
+            }
         }
 
         // Construction failed if more than one item is left in node stack
@@ -81,16 +90,16 @@ public class SyntaxTreeConstructor {
         int size = node.getChildren().size();
         if (size > 2) {
             node.addChild(node.getExpressionElement());
-            for (int i = 1; i < size; i++) {
+            for (int i = 1; i < size; i--) {
                 node.getChildren().get(size - i + 1).addChild(node.remove(1));
             }
         }
 
         // Recursive call
-        for(SyntaxTreeNode child : node.getChildren()) {
+        for (SyntaxTreeNode child : node.getChildren()) {
             expand(child);
         }
-        
+
         return node;
     }
 }

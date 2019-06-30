@@ -2,6 +2,9 @@ package com.leontepe.expression;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.Test;
 
 import com.leontepe.expression.Operator.Arity;
@@ -11,146 +14,175 @@ public class SyntaxTreeConstructionTest {
     @Test
     public void testBasicExpressions() {
 
-        Expression ex1 = new Expression("4+3*2");
-        SyntaxTreeNode actual1 = ex1.getSyntaxTree();
-        
-        SyntaxTreeNode root1 = new SyntaxTreeNode(Operator.ADD);
+        String exString1 = "4+3*2";
+        List<ExpressionElement> postfix1 = new ArrayList<ExpressionElement>();
+        postfix1.add(new Number(4));
+        postfix1.add(new Number(3));
+        postfix1.add(new Number(2));
+        postfix1.add(Operator.MULTIPLY);
+        postfix1.add(Operator.ADD);
+        SyntaxTreeNode actual1 = SyntaxTreeConstructor.construct(postfix1);
+        SyntaxTreeNode expected1 = new SyntaxTreeNode(Operator.ADD);
         {
-            SyntaxTreeNode n0 = root1.addChild(Number.get("4"));
-            SyntaxTreeNode n1 = root1.addChild(Operator.MULTIPLY);
+            SyntaxTreeNode n0 = expected1.addChild(new Number(4));
+            SyntaxTreeNode n1 = expected1.addChild(Operator.MULTIPLY);
             {
-                SyntaxTreeNode n10 = n1.addChild(Number.get("3"));
-                SyntaxTreeNode n11 = n1.addChild(Number.get("2"));
+                SyntaxTreeNode n10 = n1.addChild(new Number(3));
+                SyntaxTreeNode n11 = n1.addChild(new Number(2));
             }
         }
+        assertEquals(expected1, actual1);
 
-        assertEquals(root1, actual1);
-
-        Expression ex2 = new Expression("4-2+3-1");
-        SyntaxTreeNode actual2 = ex2.getSyntaxTree();
-        
-        SyntaxTreeNode root2 = new SyntaxTreeNode(Operator.SUBTRACT);
+        String exString2 = "4-2+3-1";
+        List<ExpressionElement> postfix2 = new ArrayList<ExpressionElement>();
+        postfix2.add(new Number(4));
+        postfix2.add(new Number(2));
+        postfix2.add(Operator.SUBTRACT);
+        postfix2.add(new Number(3));
+        postfix2.add(Operator.ADD);
+        postfix2.add(new Number(1));
+        postfix2.add(Operator.SUBTRACT);
+        SyntaxTreeNode actual2 = SyntaxTreeConstructor.construct(postfix2);
+        SyntaxTreeNode expected2 = new SyntaxTreeNode(Operator.SUBTRACT);
         {
-            SyntaxTreeNode n0 = root2.addChild(Operator.ADD);
+            SyntaxTreeNode n0 = expected2.addChild(Operator.ADD);
             {
                 SyntaxTreeNode n00 = n0.addChild(Operator.SUBTRACT);
                 {
-                    SyntaxTreeNode n000 = n00.addChild(Number.get("4"));
-                    SyntaxTreeNode n001 = n00.addChild(Number.get("2"));
+                    SyntaxTreeNode n000 = n00.addChild(new Number(4));
+                    SyntaxTreeNode n001 = n00.addChild(new Number(2));
                 }
-                SyntaxTreeNode n01 = n0.addChild(Number.get("3"));
+                SyntaxTreeNode n01 = n0.addChild(new Number(3));
             }
-            SyntaxTreeNode n1 = root2.addChild(Number.get("1"));
+            SyntaxTreeNode n1 = expected2.addChild(new Number(1));
         }
-        assertEquals(root2, actual2);
+        assertEquals(expected2, actual2);
 
-        Expression ex3 = new Expression("4");
-        SyntaxTreeNode actual3 = ex3.getSyntaxTree();
-        SyntaxTreeNode root3 = new SyntaxTreeNode(Number.get("4"));
-        assertEquals(root3, actual3);
+        String exString3  = "4";
+        List<ExpressionElement> postfix3 = new ArrayList<ExpressionElement>();
+        postfix3.add(new Number(4));
+        SyntaxTreeNode actual3 = SyntaxTreeConstructor.construct(postfix3);
+        SyntaxTreeNode expected3 = new SyntaxTreeNode(new Number(4));
+        assertEquals(expected3, actual3);
 
-        Expression ex4 = new Expression("2^2^3");
-        SyntaxTreeNode actual4 = ex4.getSyntaxTree();
-        SyntaxTreeNode root4 = new SyntaxTreeNode(Operator.EXPONENTIATE);
+        String exString4  = "2^2^3";
+        List<ExpressionElement> postfix4 = new ArrayList<ExpressionElement>();
+        postfix4.add(new Number(2));
+        postfix4.add(new Number(2));
+        postfix4.add(new Number(3));
+        postfix4.add(Operator.EXPONENTIATE);
+        postfix4.add(Operator.EXPONENTIATE);
+        SyntaxTreeNode actual4 = SyntaxTreeConstructor.construct(postfix4);
+        SyntaxTreeNode expected4 = new SyntaxTreeNode(Operator.EXPONENTIATE);
         {
-            SyntaxTreeNode n0 = root4.addChild(Number.get("2"));
-            SyntaxTreeNode n1 = root4.addChild(Operator.EXPONENTIATE);
+            SyntaxTreeNode n0 = expected4.addChild(new Number(2));
+            SyntaxTreeNode n1 = expected4.addChild(Operator.EXPONENTIATE);
             {
-                SyntaxTreeNode n10 = n1.addChild(Number.get("2"));
-                SyntaxTreeNode n11 = n1.addChild(Number.get("3"));
+                SyntaxTreeNode n10 = n1.addChild(new Number(2));
+                SyntaxTreeNode n11 = n1.addChild(new Number(3));
             }
         }
-        assertEquals(root4, actual4);
+        assertEquals(expected4, actual4);
     }
 
     @Test
     public void testParanthesisExpressions() {
-        Expression ex1 = new Expression("(4+3)*2");
-        SyntaxTreeNode actual1 = ex1.getSyntaxTree();
-        SyntaxTreeNode root1 = new SyntaxTreeNode(Operator.MULTIPLY);
+        String exString1 = "(4+3)*2";
+        List<ExpressionElement> postfix1 = new ArrayList<ExpressionElement>();
+        postfix1.add(new Number(4));
+        postfix1.add(new Number(3));
+        postfix1.add(Operator.ADD);
+        postfix1.add(new Number(2));
+        postfix1.add(Operator.MULTIPLY);
+        SyntaxTreeNode actual1 = SyntaxTreeConstructor.construct(postfix1);
+        SyntaxTreeNode expected1 = new SyntaxTreeNode(Operator.MULTIPLY);
         {
-            SyntaxTreeNode n0 = root1.addChild(Operator.ADD);
+            SyntaxTreeNode n0 = expected1.addChild(Operator.ADD);
             {
-                SyntaxTreeNode n00 = n0.addChild(Number.get("4"));
-                SyntaxTreeNode n01 = n0.addChild(Number.get("3"));
+                SyntaxTreeNode n00 = n0.addChild(new Number(4));
+                SyntaxTreeNode n01 = n0.addChild(new Number(3));
             }
-            SyntaxTreeNode n1 = root1.addChild(Number.get("2"));
+            SyntaxTreeNode n1 = expected1.addChild(new Number(2));
         }
-        assertEquals(root1, actual1);
+        assertEquals(expected1, actual1);
 
-        Expression ex2 = new Expression("3+(4*(6-3))/2");
-        SyntaxTreeNode actual2 = ex2.getSyntaxTree();
-        SyntaxTreeNode root2 = new SyntaxTreeNode(Operator.ADD);
+        String exString2 = "3+(4*(6-3))/2";
+        List<ExpressionElement> postfix2 = new ArrayList<ExpressionElement>();
+        postfix2.add(new Number(3));
+        postfix2.add(new Number(4));
+        postfix2.add(new Number(6));
+        postfix2.add(new Number(3));
+        postfix2.add(Operator.SUBTRACT);
+        postfix2.add(Operator.MULTIPLY);
+        postfix2.add(new Number(2));
+        postfix2.add(Operator.DIVIDE);
+        postfix2.add(Operator.ADD);
+        SyntaxTreeNode actual2 = SyntaxTreeConstructor.construct(postfix2);
+        SyntaxTreeNode expected2 = new SyntaxTreeNode(Operator.ADD);
         {
-            SyntaxTreeNode n0 = root2.addChild(Number.get("3"));
-            SyntaxTreeNode n1 = root2.addChild(Operator.DIVIDE);
+            SyntaxTreeNode n0 = expected2.addChild(new Number(3));
+            SyntaxTreeNode n1 = expected2.addChild(Operator.DIVIDE);
             {
                 SyntaxTreeNode n10 = n1.addChild(Operator.MULTIPLY);
                 {
-                    SyntaxTreeNode n100 = n10.addChild(Number.get("4"));
+                    SyntaxTreeNode n100 = n10.addChild(new Number(4));
                     SyntaxTreeNode n101 = n10.addChild(Operator.SUBTRACT);
                     {
-                        SyntaxTreeNode n1010 = n101.addChild(Number.get("6"));
-                        SyntaxTreeNode n1011 = n101.addChild(Number.get("3"));
+                        SyntaxTreeNode n1010 = n101.addChild(new Number(6));
+                        SyntaxTreeNode n1011 = n101.addChild(new Number(3));
                     }
                 }
-                SyntaxTreeNode n11 = n1.addChild(Number.get("2"));
+                SyntaxTreeNode n11 = n1.addChild(new Number(2));
             }
         }
-        assertEquals(root2, actual2);
-    }
-
-    @Test
-    public void testDecimalExpressions() {
-
-        Expression ex1 = new Expression("2.422*1.5");
-        SyntaxTreeNode actual1 = ex1.getSyntaxTree();
-        SyntaxTreeNode root1 = new SyntaxTreeNode(Operator.MULTIPLY);
-        {
-            SyntaxTreeNode n0 = root1.addChild(Number.get("2.422"));
-            SyntaxTreeNode n1 = root1.addChild(Number.get("1.5"));
-        }
-        assertEquals(root1, actual1);
-
-        Expression ex2 = new Expression("0.0001 * 10000.0");
-        SyntaxTreeNode actual2 = ex2.getSyntaxTree();
-        SyntaxTreeNode root2 = new SyntaxTreeNode(Operator.MULTIPLY);
-        {
-            SyntaxTreeNode n0 = root2.addChild(Number.get("0.0001"));
-            SyntaxTreeNode n1 = root2.addChild(Number.get("10000.0"));
-        }
-        assertEquals(root2, actual2);
-
+        assertEquals(expected2, actual2);
     }
 
     @Test
     public void testUnaryOperatorExpressions() {
-        Expression ex1 = new Expression("-3*12");
-        SyntaxTreeNode actual1 = ex1.getSyntaxTree();
-        SyntaxTreeNode root1 = new SyntaxTreeNode(Operator.MULTIPLY);
+        String exString1 = "-3*12";
+        List<ExpressionElement> postfix1 = new ArrayList<ExpressionElement>();
+        postfix1.add(new Number(3));
+        postfix1.add(Operator.NEGATE);
+        postfix1.add(new Number(12));
+        postfix1.add(Operator.MULTIPLY);
+        SyntaxTreeNode actual1 = SyntaxTreeConstructor.construct(postfix1);
+        SyntaxTreeNode expected1 = new SyntaxTreeNode(Operator.MULTIPLY);
         {
-            SyntaxTreeNode n0 = root1.addChild(Operator.NEGATE);
+            SyntaxTreeNode n0 = expected1.addChild(Operator.NEGATE);
             {
                 SyntaxTreeNode n00 = n0.addChild(new Number(3));
             }
-            SyntaxTreeNode n1 = root1.addChild(new Number(12));
+            SyntaxTreeNode n1 = expected1.addChild(new Number(12));
         }
-        assertEquals(root1, actual1);
+        assertEquals(expected1, actual1);
 
-        Expression ex2 = new Expression("-5.2-0.2");
-        SyntaxTreeNode actual2 = ex2.getSyntaxTree();
+        String exString2 = "-5.2-0.3";
+        List<ExpressionElement> postfix2 = new ArrayList<ExpressionElement>();
+        postfix2.add(new Number(5.2));
+        postfix2.add(Operator.NEGATE);
+        postfix2.add(new Number(0.3));
+        postfix2.add(Operator.SUBTRACT);
+        SyntaxTreeNode actual2 = SyntaxTreeConstructor.construct(postfix2);
         SyntaxTreeNode expected2 = new SyntaxTreeNode(Operator.SUBTRACT);
         {
             SyntaxTreeNode n0 = expected2.addChild(Operator.NEGATE);
             {
                 SyntaxTreeNode n00 = n0.addChild(new Number(5.2));
             }
-            SyntaxTreeNode n1 = expected2.addChild(new Number(0.2));
+            SyntaxTreeNode n1 = expected2.addChild(new Number(0.3));
         }
         assertEquals(expected2, actual2);
 
-        Expression ex3 = new Expression("-9^(1/2)");
-        SyntaxTreeNode actual3 = ex3.getSyntaxTree();
+        String exString3 = "-9^(1/2)";
+        List<ExpressionElement> postfix3 = new ArrayList<ExpressionElement>();
+        postfix3.add(new Number(9));
+        postfix3.add(new Number(1));
+        postfix3.add(new Number(2));
+        postfix3.add(Operator.DIVIDE);
+        postfix3.add(Operator.EXPONENTIATE);
+        postfix3.add(Operator.NEGATE);
+        SyntaxTreeNode actual3 = SyntaxTreeConstructor.construct(postfix3);
         SyntaxTreeNode expected3 = new SyntaxTreeNode(Operator.NEGATE);
         {
             SyntaxTreeNode n0 = expected3.addChild(Operator.EXPONENTIATE);
@@ -165,8 +197,13 @@ public class SyntaxTreeConstructionTest {
         }
         assertEquals(expected3, actual3);
 
-        Expression ex4 = new Expression("5+-3");
-        SyntaxTreeNode actual4 = ex4.getSyntaxTree();
+        String exString4 = "5+-3";
+        List<ExpressionElement> postfix4 = new ArrayList<ExpressionElement>();
+        postfix4.add(new Number(5));
+        postfix4.add(new Number(3));
+        postfix4.add(Operator.NEGATE);
+        postfix4.add(Operator.ADD);
+        SyntaxTreeNode actual4 = SyntaxTreeConstructor.construct(postfix4);
         SyntaxTreeNode expected4 = new SyntaxTreeNode(Operator.ADD);
         {
             SyntaxTreeNode n0 = expected4.addChild(new Number(5));
@@ -177,8 +214,13 @@ public class SyntaxTreeConstructionTest {
         }
         assertEquals(expected4, actual4);
 
-        Expression ex5 = new Expression("10/-5");
-        SyntaxTreeNode actual5 = ex5.getSyntaxTree();
+        String exString5 = "10/-5";
+        List<ExpressionElement> postfix5 = new ArrayList<ExpressionElement>();
+        postfix5.add(new Number(10));
+        postfix5.add(new Number(5));
+        postfix5.add(Operator.NEGATE);
+        postfix5.add(Operator.DIVIDE);
+        SyntaxTreeNode actual5 = SyntaxTreeConstructor.construct(postfix5);
         SyntaxTreeNode expected5 = new SyntaxTreeNode(Operator.DIVIDE);
         {
             SyntaxTreeNode n0 = expected5.addChild(new Number(10));
@@ -189,39 +231,33 @@ public class SyntaxTreeConstructionTest {
         }
         assertEquals(expected5, actual5);
 
-        Expression ex6 = new Expression("-(3+4)*(-5)");
-        SyntaxTreeNode actual6 = ex6.getSyntaxTree();
-        SyntaxTreeNode expected6 = new SyntaxTreeNode(Operator.MULTIPLY);
+        String exString6 = "-(3+4)*(-5)";
+        List<ExpressionElement> postfix6 = new ArrayList<ExpressionElement>();
+        postfix6.add(new Number(3));
+        postfix6.add(new Number(4));
+        postfix6.add(Operator.ADD);
+        postfix6.add(new Number(5));
+        postfix6.add(Operator.NEGATE);
+        postfix6.add(Operator.MULTIPLY);
+        postfix6.add(Operator.NEGATE);
+        SyntaxTreeNode actual6 = SyntaxTreeConstructor.construct(postfix6);
+
+        SyntaxTreeNode expected6 = new SyntaxTreeNode(Operator.NEGATE);
         {
-            SyntaxTreeNode n0 = expected6.addChild(Operator.NEGATE);
+            SyntaxTreeNode n0 = expected6.addChild(Operator.MULTIPLY);
             {
                 SyntaxTreeNode n00 = n0.addChild(Operator.ADD);
                 {
                     SyntaxTreeNode n000 = n00.addChild(new Number(3));
                     SyntaxTreeNode n001 = n00.addChild(new Number(4));
                 }
-            }
-            SyntaxTreeNode n1 = expected6.addChild(Operator.NEGATE);
-            {
-                SyntaxTreeNode n10 = n1.addChild(new Number(5));
-            }
-        }
-        assertEquals(expected6, actual6);
-
-        Expression ex7 = new Expression("3---5");
-        SyntaxTreeNode actual7 = ex7.getSyntaxTree();
-        SyntaxTreeNode expected7 = new SyntaxTreeNode(Operator.SUBTRACT);
-        {
-            SyntaxTreeNode n0 = expected7.addChild(new Number(3));
-            SyntaxTreeNode n1 = expected7.addChild(Operator.NEGATE);
-            {
-                SyntaxTreeNode n10 = n1.addChild(Operator.NEGATE);
+                SyntaxTreeNode n01 = n0.addChild(Operator.NEGATE);
                 {
-                    SyntaxTreeNode n100 = n10.addChild(new Number(5));
+                    SyntaxTreeNode n010 = n01.addChild(new Number(5));
                 }
             }
         }
-        assertEquals(expected7, actual7);
+        assertEquals(expected6, actual6);
 
     }
 }

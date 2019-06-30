@@ -17,9 +17,11 @@ AGENDA:
 - [In ein paar Wochen] Funktionen einbauen:
 	- 2D-Graph
 	- Nullstellen berechnen
-	- Ableiten
-	- "Aufleiten" / Stammfkt. bilden
-	- Extrema (Maximum, Minimum) ausrechnen
+	- Ableitung bilden (+ Ableitungsregeln)
+	- Stammfunktion bilden
+	- Extremstellen ausrechnen
+	- Wendestellen ausrechnen
+	- Notwendige / hinreichende Kriterien
 	- Integrale ausrechnen
 
 - Vektorrechnung

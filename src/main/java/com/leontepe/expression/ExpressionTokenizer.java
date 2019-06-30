@@ -81,11 +81,15 @@ public class ExpressionTokenizer {
                         } else if (previousToken instanceof Function) {
                             throw new TokenizationException("Operator after function");
                         } else {
-                            throw new RuntimeException("Unknown expression element type");
+                            throw new TokenizationException("Unknown expression element type");
                         }
                     }
-                } else if (Parenthesis.isParenthesis(c)) {
-                    elements.add(Parenthesis.get(c));
+                }
+                else if (Parenthesis.isParenthesisChar(c)) {
+                    elements.add(Parenthesis.getParenthesis(c));
+                }
+                else if (Separator.isSeparatorChar(c)) {
+                    elements.add(Separator.getSeparator(c));
                 }
             }
         }

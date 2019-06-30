@@ -17,7 +17,7 @@ public class TrigonometricFunction extends Function {
 
     // Trigonometric functions
 
-    public static TrigonometricFunction SINE = new TrigonometricFunction("sin") {
+    public static final TrigonometricFunction SINE = new TrigonometricFunction("sin") {
         @Override
         public Number apply(Number[] arguments) {
             super.apply(arguments);
@@ -25,7 +25,7 @@ public class TrigonometricFunction extends Function {
         }
     };
 
-    public static TrigonometricFunction COSINE = new TrigonometricFunction("cos") {
+    public static final TrigonometricFunction COSINE = new TrigonometricFunction("cos") {
         @Override
         public Number apply(Number[] arguments) {
             super.apply(arguments);
@@ -33,7 +33,7 @@ public class TrigonometricFunction extends Function {
         }
     };
 
-    public static TrigonometricFunction TANGENT = new TrigonometricFunction("tan") {
+    public static final TrigonometricFunction TANGENT = new TrigonometricFunction("tan") {
         @Override
         public Number apply(Number[] arguments) {
             super.apply(arguments);
@@ -41,7 +41,7 @@ public class TrigonometricFunction extends Function {
         }
     };
 
-    public static TrigonometricFunction COTANGENT = new TrigonometricFunction("cot") {
+    public static final TrigonometricFunction COTANGENT = new TrigonometricFunction("cot") {
         @Override
         public Number apply(Number[] arguments) {
             super.apply(arguments);
@@ -49,7 +49,7 @@ public class TrigonometricFunction extends Function {
         }
     };
 
-    public static TrigonometricFunction SECANT = new TrigonometricFunction("sec") {
+    public static final TrigonometricFunction SECANT = new TrigonometricFunction("sec") {
         @Override
         public Number apply(Number[] arguments) {
             super.apply(arguments);
@@ -57,7 +57,7 @@ public class TrigonometricFunction extends Function {
         }
     };
 
-    public static TrigonometricFunction COSECANT = new TrigonometricFunction("csc") {
+    public static final TrigonometricFunction COSECANT = new TrigonometricFunction("csc") {
         @Override
         public Number apply(Number[] arguments) {
             super.apply(arguments);
@@ -67,7 +67,7 @@ public class TrigonometricFunction extends Function {
 
     // Inverse trigonometric functions
 
-    public static TrigonometricFunction ARCSINE = new TrigonometricFunction("arcsin") {
+    public static final TrigonometricFunction ARCSINE = new TrigonometricFunction("arcsin") {
         @Override
         public Number apply(Number[] arguments) {
             super.apply(arguments);
@@ -75,7 +75,7 @@ public class TrigonometricFunction extends Function {
         }
     };
 
-    public static TrigonometricFunction ARCCOSINE = new TrigonometricFunction("arccos") {
+    public static final TrigonometricFunction ARCCOSINE = new TrigonometricFunction("arccos") {
         @Override
         public Number apply(Number[] arguments) {
             super.apply(arguments);
@@ -83,7 +83,7 @@ public class TrigonometricFunction extends Function {
         }
     };
 
-    public static TrigonometricFunction ARCTANGENT = new TrigonometricFunction("arctan") {
+    public static final TrigonometricFunction ARCTANGENT = new TrigonometricFunction("arctan") {
         @Override
         public Number apply(Number[] arguments) {
             super.apply(arguments);
@@ -91,7 +91,7 @@ public class TrigonometricFunction extends Function {
         }
     };
 
-    public static TrigonometricFunction ARCCOTANGENT = new TrigonometricFunction("arccot") {
+    public static final TrigonometricFunction ARCCOTANGENT = new TrigonometricFunction("arccot") {
         @Override
         public Number apply(Number[] arguments) {
             super.apply(arguments);
@@ -99,7 +99,7 @@ public class TrigonometricFunction extends Function {
         }
     };
 
-    public static TrigonometricFunction ARCSECANT = new TrigonometricFunction("arcsec") {
+    public static final TrigonometricFunction ARCSECANT = new TrigonometricFunction("arcsec") {
         @Override
         public Number apply(Number[] arguments) {
             super.apply(arguments);
@@ -107,7 +107,7 @@ public class TrigonometricFunction extends Function {
         }
     };
 
-    public static TrigonometricFunction ARCCOSECANT = new TrigonometricFunction("arccsc") {
+    public static final TrigonometricFunction ARCCOSECANT = new TrigonometricFunction("arccsc") {
         @Override
         public Number apply(Number[] arguments) {
             super.apply(arguments);

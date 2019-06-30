@@ -6,6 +6,7 @@ import static org.junit.Assert.assertEquals;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.leontepe.function.LogarithmicFunction;
 import com.leontepe.function.TrigonometricFunction;
 
 import org.junit.Test;
@@ -362,7 +363,7 @@ public class InfixToPostfixTest {
 
     @Test
     public void testPredefinedFunctionExpressions() {
-        // Expression ex1 = new Expression("sin(3)");
+        String exString1 = "sin(3)";
         List<ExpressionElement> infix1 = new ArrayList<ExpressionElement>();
         infix1.add(TrigonometricFunction.SINE);
         infix1.add(Parenthesis.LEFT_PARENTHESIS);
@@ -373,11 +374,11 @@ public class InfixToPostfixTest {
         postfix1.add(TrigonometricFunction.SINE);
         assertEquals(NotationConverter.infixToPostfix(infix1), postfix1);
 
-        // Expression ex1 = new Expression("3*sin(2+4)");
+        String exString2 = "3*lg(2+4)";
         List<ExpressionElement> infix2 = new ArrayList<ExpressionElement>();
         infix2.add(new Number(3));
         infix2.add(Operator.MULTIPLY);
-        infix2.add(TrigonometricFunction.SINE);
+        infix2.add(LogarithmicFunction.COMMON_LOGARITHM);
         infix2.add(Parenthesis.LEFT_PARENTHESIS);
         infix2.add(new Number(2));
         infix2.add(Operator.ADD);
@@ -388,11 +389,11 @@ public class InfixToPostfixTest {
         postfix2.add(new Number(2));
         postfix2.add(new Number(4));
         postfix2.add(Operator.ADD);
-        postfix2.add(TrigonometricFunction.SINE);
+        postfix2.add(LogarithmicFunction.COMMON_LOGARITHM);
         postfix2.add(Operator.MULTIPLY);
         assertEquals(NotationConverter.infixToPostfix(infix2), postfix2);
 
-        // Expression ex1 = new Expression("0.5/cos(-sin(4+(-12)) - 52.4)");
+        String exString3 = "0.5/cos(-sin(4+(-12)) - 52.4)";
         List<ExpressionElement> infix3 = new ArrayList<ExpressionElement>();
         infix3.add(new Number(0.5));
         infix3.add(Operator.DIVIDE);
@@ -424,6 +425,24 @@ public class InfixToPostfixTest {
         postfix3.add(TrigonometricFunction.COSINE);
         postfix3.add(Operator.DIVIDE);
         assertEquals(NotationConverter.infixToPostfix(infix3), postfix3);
-    }
 
+        String exString4 = "arcsin(ln(lg(3)))";
+        List<ExpressionElement> infix4 = new ArrayList<ExpressionElement>();
+        infix4.add(TrigonometricFunction.ARCSINE);
+        infix4.add(Parenthesis.LEFT_PARENTHESIS);
+        infix4.add(LogarithmicFunction.NATURAL_LOGARITHM);
+        infix4.add(Parenthesis.LEFT_PARENTHESIS);
+        infix4.add(LogarithmicFunction.COMMON_LOGARITHM);
+        infix4.add(Parenthesis.LEFT_PARENTHESIS);
+        infix4.add(new Number(3));
+        infix4.add(Parenthesis.RIGHT_PARENTHESIS);
+        infix4.add(Parenthesis.RIGHT_PARENTHESIS);
+        infix4.add(Parenthesis.RIGHT_PARENTHESIS);
+        List<ExpressionElement> postfix4 = new ArrayList<ExpressionElement>();
+        postfix4.add(new Number(3));
+        postfix4.add(LogarithmicFunction.COMMON_LOGARITHM);
+        postfix4.add(LogarithmicFunction.NATURAL_LOGARITHM);
+        postfix4.add(TrigonometricFunction.ARCSINE);
+        assertEquals(NotationConverter.infixToPostfix(infix4), postfix4);
+    }
 }

@@ -1,6 +1,10 @@
 
 package com.leontepe.expression;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
+
 public class Parenthesis extends ExpressionElement {
 
     public static final Parenthesis LEFT_PARENTHESIS = new Parenthesis('(');
@@ -30,22 +34,33 @@ public class Parenthesis extends ExpressionElement {
         return false;
     }
 
-    public static Parenthesis get(char c) {
-        if(isLeftParenthesis(c)) return LEFT_PARENTHESIS;
-        else if(isRightParenthesis(c)) return RIGHT_PARENTHESIS;
-        else throw new IllegalArgumentException();
+    public static Parenthesis getParenthesis(char c) {
+        for (Parenthesis p : getAllParentheses()) {
+            if (p.getParenthesisChar() == c) {
+                return p;
+            }
+        }
+        return null;
     }
 
-    public static boolean isLeftParenthesis(char c) {
-        return c == LEFT_PARENTHESIS.getParenthesisChar();
+    public static boolean isParenthesisChar(char c) {
+        return getParenthesis(c) != null;
     }
 
-    public static boolean isRightParenthesis(char c) {
-        return c == RIGHT_PARENTHESIS.getParenthesisChar();
-    }
-
-    public static boolean isParenthesis(char c) {
-        return isLeftParenthesis(c) || isRightParenthesis(c);
+    public static List<Parenthesis> getAllParentheses() {
+        List<Parenthesis> parentheses = new ArrayList<Parenthesis>();
+        for(Field f : Parenthesis.class.getFields()) {
+            try {
+                Object possibleParenthesis = f.get(null);
+                if(Parenthesis.class.isAssignableFrom(possibleParenthesis.getClass())) {
+                    parentheses.add((Parenthesis)possibleParenthesis);
+                }
+            }
+            catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+        return parentheses;
     }
 
 }
