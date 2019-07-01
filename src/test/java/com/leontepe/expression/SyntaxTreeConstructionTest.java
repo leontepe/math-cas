@@ -7,8 +7,6 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.leontepe.expression.Operator.Arity;
-
 public class SyntaxTreeConstructionTest {
 
     @Test
@@ -58,14 +56,14 @@ public class SyntaxTreeConstructionTest {
         }
         assertEquals(expected2, actual2);
 
-        String exString3  = "4";
+        String exString3 = "4";
         List<ExpressionElement> postfix3 = new ArrayList<ExpressionElement>();
         postfix3.add(new Number(4));
         SyntaxTreeNode actual3 = SyntaxTreeConstructor.construct(postfix3);
         SyntaxTreeNode expected3 = new SyntaxTreeNode(new Number(4));
         assertEquals(expected3, actual3);
 
-        String exString4  = "2^2^3";
+        String exString4 = "2^2^3";
         List<ExpressionElement> postfix4 = new ArrayList<ExpressionElement>();
         postfix4.add(new Number(2));
         postfix4.add(new Number(2));
@@ -259,5 +257,103 @@ public class SyntaxTreeConstructionTest {
         }
         assertEquals(expected6, actual6);
 
+        String exString7 = "2!+4";
+        List<ExpressionElement> postfix7 = new ArrayList<ExpressionElement>();
+        postfix7.add(new Number(2));
+        postfix7.add(Operator.FACTORIAL);
+        postfix7.add(new Number(4));
+        postfix7.add(Operator.ADD);
+        SyntaxTreeNode actual7 = SyntaxTreeConstructor.construct(postfix7);
+        SyntaxTreeNode expected7 = new SyntaxTreeNode(Operator.ADD);
+        {
+            SyntaxTreeNode n0 = expected7.addChild(Operator.FACTORIAL);
+            {
+                SyntaxTreeNode n00 = n0.addChild(new Number(2));
+            }
+            SyntaxTreeNode n1 = expected7.addChild(new Number(4));
+        }
+        assertEquals(expected7, actual7);
+
+        String exString14 = "3*(5-2)!-3!";
+        List<ExpressionElement> postfix8 = new ArrayList<ExpressionElement>();
+        postfix8.add(new Number(3));
+        postfix8.add(new Number(5));
+        postfix8.add(new Number(2));
+        postfix8.add(Operator.SUBTRACT);
+        postfix8.add(Operator.FACTORIAL);
+        postfix8.add(Operator.MULTIPLY);
+        postfix8.add(new Number(3));
+        postfix8.add(Operator.FACTORIAL);
+        postfix8.add(Operator.SUBTRACT);
+        SyntaxTreeNode actual8 = SyntaxTreeConstructor.construct(postfix8);
+        SyntaxTreeNode expected8 = new SyntaxTreeNode(Operator.SUBTRACT);
+        {
+            SyntaxTreeNode n0 = expected8.addChild(Operator.MULTIPLY);
+            {
+                SyntaxTreeNode n00 = n0.addChild(new Number(3));
+                SyntaxTreeNode n01 = n0.addChild(Operator.FACTORIAL);
+                {
+                    SyntaxTreeNode n010 = n01.addChild(Operator.SUBTRACT);
+                    {
+                        SyntaxTreeNode n0100 = n010.addChild(new Number(5));
+                        SyntaxTreeNode n0101 = n010.addChild(new Number(2));
+                    }
+                }
+            }
+            SyntaxTreeNode n1 = expected8.addChild(Operator.FACTORIAL);
+            {
+                SyntaxTreeNode n10 = n1.addChild(new Number(3));
+            }
+        }
+        assertEquals(expected8, actual8);
+
+        String exString15 = "-5!+4!*2-(-3!!)";
+        List<ExpressionElement> postfix9 = new ArrayList<ExpressionElement>();
+        postfix9.add(new Number(5));
+        postfix9.add(Operator.FACTORIAL);
+        postfix9.add(Operator.NEGATE);
+        postfix9.add(new Number(4));
+        postfix9.add(Operator.FACTORIAL);
+        postfix9.add(new Number(2));
+        postfix9.add(Operator.MULTIPLY);
+        postfix9.add(Operator.ADD);
+        postfix9.add(new Number(3));
+        postfix9.add(Operator.FACTORIAL);
+        postfix9.add(Operator.FACTORIAL);
+        postfix9.add(Operator.NEGATE);
+        postfix9.add(Operator.SUBTRACT);
+        SyntaxTreeNode actual9 = SyntaxTreeConstructor.construct(postfix9);
+        SyntaxTreeNode expected9 = new SyntaxTreeNode(Operator.SUBTRACT);
+        {
+            SyntaxTreeNode n0 = expected9.addChild(Operator.ADD);
+            {
+                SyntaxTreeNode n00 = n0.addChild(Operator.NEGATE);
+                {
+                    SyntaxTreeNode n000 = n00.addChild(Operator.FACTORIAL);
+                    {
+                        SyntaxTreeNode n0000 = n000.addChild(new Number(5));
+                    }
+                }
+                SyntaxTreeNode n01 = n0.addChild(Operator.MULTIPLY);
+                {
+                    SyntaxTreeNode n010 = n01.addChild(Operator.FACTORIAL);
+                    {
+                        SyntaxTreeNode n0100 = n010.addChild(new Number(4));
+                    }
+                    SyntaxTreeNode n011 = n01.addChild(new Number(2));
+                }
+            }
+            SyntaxTreeNode n1 = expected9.addChild(Operator.NEGATE);
+            {
+                SyntaxTreeNode n10 = n1.addChild(Operator.FACTORIAL);
+                {
+                    SyntaxTreeNode n100 = n10.addChild(Operator.FACTORIAL);
+                    {
+                        SyntaxTreeNode n1000 = n100.addChild(new Number(3));
+                    }
+                }
+            }
+        }
+        assertEquals(expected9, actual9);
     }
 }

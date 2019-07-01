@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.leontepe.MathContext;
 import com.leontepe.exception.TokenizationException;
+import com.leontepe.expression.Operator.NotationType;
 import com.leontepe.function.Function;
 
 import java.util.ArrayList;
@@ -47,12 +48,12 @@ public class ExpressionTokenizer {
                     numberReadingStart = -1;
                 }
                 // Check if letter reading should end
-                if(letterReadingStart != -1 && !Character.isLetter(c)) {
+                if (letterReadingStart != -1 && !Character.isLetter(c)) {
                     String letterString = expressionString.substring(letterReadingStart, i);
-                    if(context.containsFunction(letterString)) {
+                    if (context.containsFunction(letterString)) {
                         elements.add(context.getFunction(letterString));
                     }
-                    else if(letterString.length() == 1) {
+                    else if (letterString.length() == 1) {
                         char varChar = letterString.charAt(0);
                         if (context.containsVariable(varChar)) {
                             elements.add(context.getVariable(varChar));
@@ -66,22 +67,25 @@ public class ExpressionTokenizer {
                     letterReadingStart = -1;
                 }
 
-                if (Operator.isOperator(c)) {
+                if (Operator.isOperatorChar(c)) {
                     if (elements.isEmpty()) {
-                        elements.add(Operator.get(c, Operator.Arity.UNARY));
-                    } else {
+                        elements.add(Operator.getOperator(c, 1, NotationType.PREFIX));
+                    }
+                    else {
                         ExpressionElement previousToken = elements.get(elements.size() - 1);
 
                         if (previousToken instanceof Number || previousToken instanceof Variable
-                                || previousToken.equals(Parenthesis.RIGHT_PARENTHESIS)) {
-                            elements.add(Operator.get(c, Operator.Arity.BINARY));
-                        } else if (previousToken instanceof Operator 
-                                || previousToken.equals(Parenthesis.LEFT_PARENTHESIS)) {
-                            elements.add(Operator.get(c, Operator.Arity.UNARY));
-                        } else if (previousToken instanceof Function) {
-                            throw new TokenizationException("Operator after function");
-                        } else {
-                            throw new TokenizationException("Unknown expression element type");
+                                || previousToken == Parenthesis.RIGHT_PARENTHESIS || (previousToken instanceof Operator
+                                        && ((Operator) previousToken).getNotationType() == NotationType.POSTFIX)) {
+                            Operator binaryOp = Operator.getOperator(c, 2, NotationType.INFIX);
+                            Operator unaryPostfixOp = Operator.getOperator(c, 1, NotationType.POSTFIX);
+                            elements.add(binaryOp != null ? binaryOp : unaryPostfixOp);
+                        }
+                        else if (previousToken instanceof Operator || previousToken == Parenthesis.LEFT_PARENTHESIS) {
+                            elements.add(Operator.getOperator(c, 1, NotationType.PREFIX));
+                        }
+                        else {
+                            // syntax error
                         }
                     }
                 }
@@ -102,10 +106,10 @@ public class ExpressionTokenizer {
         }
         else if (letterReadingStart != -1) {
             String letterString = expressionString.substring(letterReadingStart, expressionString.length());
-            if(context.containsFunction(letterString)) {
+            if (context.containsFunction(letterString)) {
                 elements.add(context.getFunction(letterString));
             }
-            else if(letterString.length() == 1) {
+            else if (letterString.length() == 1) {
                 char varChar = letterString.charAt(0);
                 if (context.containsVariable(varChar)) {
                     elements.add(context.getVariable(varChar));

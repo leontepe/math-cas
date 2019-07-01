@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
-import com.leontepe.expression.Operator.Arity;
 import com.leontepe.function.Function;
 
 public class SyntaxTreeConstructor {
@@ -36,11 +35,11 @@ public class SyntaxTreeConstructor {
                 SyntaxTreeNode operatorNode = new SyntaxTreeNode(op);
 
                 // Respectively pop 1 or 2 operands from stack and add them as children to the operator
-                if(op.getArity() == Arity.UNARY) {
+                if(op.getArity() == 1) {
                     SyntaxTreeNode operandNode = nodeStack.pop();
                     operatorNode.addChild(operandNode);
                 }
-                else if(op.getArity() == Arity.BINARY) {
+                else if(op.getArity() == 2) {
                     SyntaxTreeNode operandNode2 = nodeStack.pop();
                     SyntaxTreeNode operandNode1 = nodeStack.pop();
                     operatorNode.addChild(operandNode1);

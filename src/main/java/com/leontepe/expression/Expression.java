@@ -3,7 +3,6 @@ package com.leontepe.expression;
 
 import java.util.*;
 
-import com.leontepe.expression.Operator.Arity;
 import com.leontepe.expression.Operator.Associativity;
 import com.leontepe.expression.Operator.BinaryOperator;
 import com.leontepe.expression.Operator.UnaryOperator;
@@ -37,12 +36,12 @@ public class Expression extends ExpressionElement {
     public List<ExpressionElement> getExpressionElements() {
         return this.expressionElements;
     }
-    
+
     @Override
-    public String getStringValue() {
+    public String toString() {
         String expressionString = "";
         for(ExpressionElement el : expressionElements) {
-            expressionString += el.getStringValue();
+            expressionString += el.toString();
         }
         return expressionString;
     }
@@ -79,7 +78,7 @@ public class Expression extends ExpressionElement {
             else if (el instanceof Operator) {
                 Operator op = (Operator) el;
 
-                if (op.getArity() == Arity.BINARY) {
+                if (op.getArity() == 2) {
                     BinaryOperator binOp = (BinaryOperator) op;
                     Number operand2 = numberStack.pop();
                     Number operand1 = numberStack.pop();
@@ -87,7 +86,7 @@ public class Expression extends ExpressionElement {
                     numberStack.push(result);
 
                 }
-                else if (op.getArity() == Arity.UNARY) {
+                else if (op.getArity() == 1) {
                     UnaryOperator binOp = (UnaryOperator) op;
                     Number operand = numberStack.pop();
                     Number result = binOp.operate(operand);

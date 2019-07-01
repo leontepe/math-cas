@@ -5,7 +5,6 @@ import java.util.List;
 import com.leontepe.exception.EvaluationException;
 import com.leontepe.expression.*;
 import com.leontepe.expression.Number;
-import com.leontepe.expression.Operator.Arity;
 import com.leontepe.expression.Operator.BinaryOperator;
 import com.leontepe.expression.Operator.MultiaryOperator;
 import com.leontepe.expression.Operator.UnaryOperator;
@@ -155,7 +154,7 @@ public class SyntaxTreeNode implements Cloneable {
         else {
             if(expressionElement instanceof Operator) {
                 Operator op = (Operator)expressionElement;
-                if(op.getArity() == Arity.UNARY) {
+                if(op.getArity() == 2) {
                     if(children.size() == 1) {
                         UnaryOperator unaryOp = (UnaryOperator)op;
                         return unaryOp.operate(children.get(0).evaluate());

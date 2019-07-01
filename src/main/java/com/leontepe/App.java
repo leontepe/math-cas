@@ -21,8 +21,6 @@ public class App {
         // new Expression("4+3*2").getSyntaxTree().print();
         // new Expression("4-2+3-1").getSyntaxTree().print();
 
-        new Expression("0.005-((-12+13)^12*3.005)").getSyntaxTree().print();
-
         // System.out.println("2+3*(2-4)");
         // List<ExpressionElement> postfix1 =
         // NotationConverter.infixToPostfix(ExpressionTokenizer.tokenize("2+3*(2-4)"));

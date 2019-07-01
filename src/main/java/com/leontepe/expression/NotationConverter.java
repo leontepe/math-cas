@@ -1,6 +1,5 @@
 package com.leontepe.expression;
 
-import com.leontepe.expression.Operator.Arity;
 import com.leontepe.expression.Operator.BinaryOperator;
 import com.leontepe.function.Function;
 
@@ -41,28 +40,33 @@ public class NotationConverter {
                     postfix.add((Operator) operatorStack.pop());
                 }
                 operatorStack.push(currentOperator);
-            } else if (el instanceof Function) {
+            }
+            else if (el instanceof Function) {
                 Function f = (Function) el;
                 operatorStack.push(f);
-            } else if (el instanceof Parenthesis) {
+            }
+            else if (el instanceof Parenthesis) {
                 Parenthesis par = (Parenthesis) el;
                 if (par == Parenthesis.LEFT_PARENTHESIS) {
                     operatorStack.push(Parenthesis.LEFT_PARENTHESIS);
-                } else if (par == Parenthesis.RIGHT_PARENTHESIS) {
+                }
+                else if (par == Parenthesis.RIGHT_PARENTHESIS) {
                     while (!operatorStack.isEmpty() && operatorStack.peek() != Parenthesis.LEFT_PARENTHESIS) {
                         postfix.add(((Operator) operatorStack.pop()));
                     }
                     // Pop left parenthesis into oblivion
                     operatorStack.pop();
 
-                    // If a function is at the top of the operator stack, pop it (then it is a function call)
-                    if(!operatorStack.isEmpty() && operatorStack.peek() instanceof Function) {
+                    // If a function is at the top of the operator stack, pop it (then it is a
+                    // function call)
+                    if (!operatorStack.isEmpty() && operatorStack.peek() instanceof Function && !(operatorStack.peek() instanceof Operator)) {
                         Function f = (Function) operatorStack.pop();
                         postfix.add(f);
                     }
                 }
 
-            } else if (el instanceof Variable || el instanceof Number) {
+            }
+            else if (el instanceof Variable || el instanceof Number) {
                 postfix.add(el);
             }
         }
@@ -81,7 +85,8 @@ public class NotationConverter {
             // Pop if precedence is higher
             if (peekOp.getPrecedence() > currentOp.getPrecedence()) {
                 return true;
-            } else if (peekOp.getArity() == Arity.BINARY) {
+            }
+            else if (peekOp.getArity() == 2) {
                 BinaryOperator peekOpBinary = (BinaryOperator) peekOp;
                 if ((peekOpBinary.getPrecedence() == currentOp.getPrecedence()
                         && peekOpBinary.getAssociativity() == Operator.Associativity.LEFT)) {

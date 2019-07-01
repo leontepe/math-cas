@@ -16,27 +16,18 @@ public class Parenthesis extends ExpressionElement {
         this.parenthesisChar = paranthesisChar;
     }
 
-    public char getParenthesisChar() {
+    public char getChar() {
         return this.parenthesisChar;
     }
 
     @Override
-    public String getStringValue() {
+    public String toString() {
         return String.valueOf(this.parenthesisChar);
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if(obj instanceof Parenthesis) {
-            Parenthesis par = (Parenthesis)obj;
-            return par.getParenthesisChar() == this.parenthesisChar;
-        }
-        return false;
     }
 
     public static Parenthesis getParenthesis(char c) {
         for (Parenthesis p : getAllParentheses()) {
-            if (p.getParenthesisChar() == c) {
+            if (p.getChar() == c) {
                 return p;
             }
         }

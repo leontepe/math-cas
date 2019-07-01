@@ -60,7 +60,7 @@ public abstract class Function extends ExpressionElement {
     }
 
     @Override
-    public String getStringValue() {
+    public String toString() {
         return getFunctionName();
     }
 

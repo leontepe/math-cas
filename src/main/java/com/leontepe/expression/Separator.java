@@ -25,8 +25,8 @@ public class Separator extends ExpressionElement {
     }
 
     @Override
-    public String getStringValue() {
-        return null;
+    public String toString() {
+        return String.valueOf(separatorChar);
     }
 
     public static Separator getSeparator(char c) {

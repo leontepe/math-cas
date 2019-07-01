@@ -171,7 +171,7 @@ public class InfixToPostfixTest {
         postfix4.add(Operator.MULTIPLY);
         assertEquals(NotationConverter.infixToPostfix(infix4), postfix4);
 
-        //Expression ex5 = new Expression("2^(3^3)^2");
+        String exString5 = "2^(3^3)^2";
         List<ExpressionElement> infix5 = new ArrayList<ExpressionElement>();
         infix5.add(Number.get("2"));
         infix5.add(Operator.EXPONENTIATE);
@@ -182,15 +182,16 @@ public class InfixToPostfixTest {
         infix5.add(Parenthesis.RIGHT_PARENTHESIS);
         infix5.add(Operator.EXPONENTIATE);
         infix5.add(Number.get("2"));
-        List<ExpressionElement> postfix5 = new ArrayList<ExpressionElement>();
-        postfix5.add(Number.get("2"));
-        postfix5.add(Number.get("3"));
-        postfix5.add(Number.get("3"));
-        postfix5.add(Operator.EXPONENTIATE);
-        postfix5.add(Number.get("2"));
-        postfix5.add(Operator.EXPONENTIATE);
-        postfix5.add(Operator.EXPONENTIATE);
-        assertEquals(NotationConverter.infixToPostfix(infix5), postfix5);
+        List<ExpressionElement> actual5 = NotationConverter.infixToPostfix(infix5);
+        List<ExpressionElement> expected5 = new ArrayList<ExpressionElement>();
+        expected5.add(Number.get("2"));
+        expected5.add(Number.get("3"));
+        expected5.add(Number.get("3"));
+        expected5.add(Operator.EXPONENTIATE);
+        expected5.add(Number.get("2"));
+        expected5.add(Operator.EXPONENTIATE);
+        expected5.add(Operator.EXPONENTIATE);
+        assertEquals(expected5, actual5);
 
         //Expression ex6 = new Expression("(5)");
         List<ExpressionElement> infix6 = new ArrayList<ExpressionElement>();
@@ -347,7 +348,6 @@ public class InfixToPostfixTest {
         assertEquals(NotationConverter.infixToPostfix(infix11), postfix11);
 
         // "-3/2"
-        // (This could also be parsed as "32/-")
         List<ExpressionElement> infix12 = new ArrayList<ExpressionElement>();
         infix12.add(Operator.NEGATE);
         infix12.add(new Number(3));
@@ -359,6 +359,80 @@ public class InfixToPostfixTest {
         postfix12.add(new Number(2));
         postfix12.add(Operator.DIVIDE);
         assertEquals(NotationConverter.infixToPostfix(infix12), postfix12);
+
+        String exString13 = "1+2!";
+        List<ExpressionElement> infix13 = new ArrayList<ExpressionElement>();
+        infix13.add(new Number(1));
+        infix13.add(Operator.ADD);
+        infix13.add(new Number(2));
+        infix13.add(Operator.FACTORIAL);
+        List<ExpressionElement> actual13 = NotationConverter.infixToPostfix(infix13);
+        List<ExpressionElement> expected13 = new ArrayList<ExpressionElement>();
+        expected13.add(new Number(1));
+        expected13.add(new Number(2));
+        expected13.add(Operator.FACTORIAL);
+        expected13.add(Operator.ADD);
+        assertEquals(expected13, actual13);
+
+        String exString14 = "3*(5-2)!-3!";
+        List<ExpressionElement> infix14 = new ArrayList<ExpressionElement>();
+        infix14.add(new Number(3));
+        infix14.add(Operator.MULTIPLY);
+        infix14.add(Parenthesis.LEFT_PARENTHESIS);
+        infix14.add(new Number(5));
+        infix14.add(Operator.SUBTRACT);
+        infix14.add(new Number(2));
+        infix14.add(Parenthesis.RIGHT_PARENTHESIS);
+        infix14.add(Operator.FACTORIAL);
+        infix14.add(Operator.SUBTRACT);
+        infix14.add(new Number(3));
+        infix14.add(Operator.FACTORIAL);
+        List<ExpressionElement> actual14 = NotationConverter.infixToPostfix(infix14);
+        List<ExpressionElement> expected14 = new ArrayList<ExpressionElement>();
+        expected14.add(new Number(3));
+        expected14.add(new Number(5));
+        expected14.add(new Number(2));
+        expected14.add(Operator.SUBTRACT);
+        expected14.add(Operator.FACTORIAL);
+        expected14.add(Operator.MULTIPLY);
+        expected14.add(new Number(3));
+        expected14.add(Operator.FACTORIAL);
+        expected14.add(Operator.SUBTRACT);
+        assertEquals(expected14, actual14);
+        
+        String exString15 = "-5!+4!*2-(-3!!)";
+        List<ExpressionElement> infix15 = new ArrayList<ExpressionElement>();
+        infix15.add(Operator.NEGATE);
+        infix15.add(new Number(5));
+        infix15.add(Operator.FACTORIAL);
+        infix15.add(Operator.ADD);
+        infix15.add(new Number(4));
+        infix15.add(Operator.FACTORIAL);
+        infix15.add(Operator.MULTIPLY);
+        infix15.add(new Number(2));
+        infix15.add(Operator.SUBTRACT);
+        infix15.add(Parenthesis.LEFT_PARENTHESIS);
+        infix15.add(Operator.NEGATE);
+        infix15.add(new Number(3));
+        infix15.add(Operator.FACTORIAL);
+        infix15.add(Operator.FACTORIAL);
+        infix15.add(Parenthesis.RIGHT_PARENTHESIS);
+        List<ExpressionElement> actual15 = NotationConverter.infixToPostfix(infix15);
+        List<ExpressionElement> expected15 = new ArrayList<ExpressionElement>();
+        expected15.add(new Number(5));
+        expected15.add(Operator.FACTORIAL);
+        expected15.add(Operator.NEGATE);
+        expected15.add(new Number(4));
+        expected15.add(Operator.FACTORIAL);
+        expected15.add(new Number(2));
+        expected15.add(Operator.MULTIPLY);
+        expected15.add(Operator.ADD);
+        expected15.add(new Number(3));
+        expected15.add(Operator.FACTORIAL);
+        expected15.add(Operator.FACTORIAL);
+        expected15.add(Operator.NEGATE);
+        expected15.add(Operator.SUBTRACT);
+        assertEquals(expected15, actual15);
     }
 
     @Test

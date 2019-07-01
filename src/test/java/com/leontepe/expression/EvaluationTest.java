@@ -10,7 +10,7 @@ public class EvaluationTest {
 
     @Test
     public void testBasicExpressions() {
-        assertEquals(new Expression("3^4").evaluate(), new Number(81));
+        assertEquals(new Expression("4^3^2").evaluate(), new Number(262144));
         assertEquals(new Expression("4 + ((5/8)^3) / 12.001 * 10^3").evaluate(), new Number(24.343356803599700024997916840263));
         assertEquals(new Expression("3 - 8 / 2").evaluate(), new Number(-1));
         assertEquals(new Expression("1.5+0.5-4^(1/2)-5").evaluate(), new Number(-5));
@@ -36,6 +36,12 @@ public class EvaluationTest {
     public void testConstantExpressions() {
         assertEquals(new Expression("e*2 + 14").evaluate(), new Number(19.436563656918090470720574942705));
         assertEquals(new Expression("-e / 2").evaluate(), new Number(-1.3591409142295226176801437356763));
+    }
+
+    @Test
+    public void testUnaryOperatorExpressions() {
+        assertEquals(new Number(10), new Expression("3!+4").evaluate());
+        assertEquals(new Number(767), new Expression("-0!+4!*2-(-3!!)").evaluate());
     }
  
 }

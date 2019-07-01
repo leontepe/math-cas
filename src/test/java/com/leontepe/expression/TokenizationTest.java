@@ -152,6 +152,51 @@ public class TokenizationTest {
         expected3.add(Operator.NEGATE);
         expected3.add(new Number(3));
         assertEquals(expected3, actual3);
+
+        String exString4 = "4!+3";
+        List<ExpressionElement> actual4 = ExpressionTokenizer.tokenize(exString4);
+        List<ExpressionElement> expected4 = new ArrayList<ExpressionElement>();
+        expected4.add(new Number(4));
+        expected4.add(Operator.FACTORIAL);
+        expected4.add(Operator.ADD);
+        expected4.add(new Number(3));
+        assertEquals(expected4, actual4);
+
+        String exString5 = "3*(5-2)!-3!";
+        List<ExpressionElement> actual5 = ExpressionTokenizer.tokenize(exString5);
+        List<ExpressionElement> expected5 = new ArrayList<ExpressionElement>();
+        expected5.add(new Number(3));
+        expected5.add(Operator.MULTIPLY);
+        expected5.add(Parenthesis.LEFT_PARENTHESIS);
+        expected5.add(new Number(5));
+        expected5.add(Operator.SUBTRACT);
+        expected5.add(new Number(2));
+        expected5.add(Parenthesis.RIGHT_PARENTHESIS);
+        expected5.add(Operator.FACTORIAL);
+        expected5.add(Operator.SUBTRACT);
+        expected5.add(new Number(3));
+        expected5.add(Operator.FACTORIAL);
+        assertEquals(expected5, actual5);
+
+        String exString6 = "-5!+4!*2-(-3!!)";
+        List<ExpressionElement> actual6 = ExpressionTokenizer.tokenize(exString6);
+        List<ExpressionElement> expected6 = new ArrayList<ExpressionElement>();
+        expected6.add(Operator.NEGATE);
+        expected6.add(new Number(5));
+        expected6.add(Operator.FACTORIAL);
+        expected6.add(Operator.ADD);
+        expected6.add(new Number(4));
+        expected6.add(Operator.FACTORIAL);
+        expected6.add(Operator.MULTIPLY);
+        expected6.add(new Number(2));
+        expected6.add(Operator.SUBTRACT);
+        expected6.add(Parenthesis.LEFT_PARENTHESIS);
+        expected6.add(Operator.NEGATE);
+        expected6.add(new Number(3));
+        expected6.add(Operator.FACTORIAL);
+        expected6.add(Operator.FACTORIAL);
+        expected6.add(Parenthesis.RIGHT_PARENTHESIS);
+        assertEquals(expected6, actual6);
     }
 
     @Test

@@ -3,7 +3,6 @@ package com.leontepe.expression;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.leontepe.expression.Operator.Arity;
 import com.leontepe.expression.Operator.UnaryOperator;
 
 public class ExpressionDeconstructor {
@@ -19,7 +18,7 @@ public class ExpressionDeconstructor {
                     && ((Operator) node.getParent().getExpressionElement()).getPrecedence() > ((Operator)node.getExpressionElement()).getPrecedence();
             
             if (parenthesize) infix.add(Parenthesis.LEFT_PARENTHESIS);
-            if(op.getArity() == Arity.UNARY) {
+            if(op.getArity() == 1) {
                 // since only unary prefix operators exist right now
                 infix.add(node.getExpressionElement());
                 infix.addAll(deconstruct(node.getChildren().get(0)));

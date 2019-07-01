@@ -36,7 +36,7 @@ public class Variable extends ExpressionElement {
     }
 
     @Override
-    public String getStringValue() {
+    public String toString() {
         return String.valueOf(variableChar);
     }
 

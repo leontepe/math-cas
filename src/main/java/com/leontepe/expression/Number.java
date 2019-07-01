@@ -30,7 +30,7 @@ public class Number extends ExpressionElement {
     }
     
     @Override
-    public String getStringValue() {
+    public String toString() {
         if(isInteger()) {
             return Integer.toString((int)value);
         }
