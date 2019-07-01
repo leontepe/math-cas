@@ -17,29 +17,30 @@ public class SyntaxTreeConstructor {
         Stack<SyntaxTreeNode> nodeStack = new Stack<SyntaxTreeNode>();
 
         // Iterate through postfix token list
-        for(ExpressionElement el : postfix) {
+        for (ExpressionElement el : postfix) {
 
-            if(el instanceof Number) {
-                Number number = (Number)el;
+            if (el instanceof Number) {
+                Number number = (Number) el;
                 SyntaxTreeNode numberNode = new SyntaxTreeNode(number);
                 nodeStack.push(numberNode);
             }
-            else if(el instanceof Variable) {
-                Variable variable = (Variable)el;
+            else if (el instanceof Variable) {
+                Variable variable = (Variable) el;
                 SyntaxTreeNode variableNode = new SyntaxTreeNode(variable);
                 nodeStack.push(variableNode);
             }
-            else if(el instanceof Operator) {
+            else if (el instanceof Operator) {
                 // Create operator node
-                Operator op = (Operator)el;
+                Operator op = (Operator) el;
                 SyntaxTreeNode operatorNode = new SyntaxTreeNode(op);
 
-                // Respectively pop 1 or 2 operands from stack and add them as children to the operator
-                if(op.getArity() == 1) {
+                // Respectively pop 1 or 2 operands from stack and add them as children to the
+                // operator
+                if (op.getArity() == 1) {
                     SyntaxTreeNode operandNode = nodeStack.pop();
                     operatorNode.addChild(operandNode);
                 }
-                else if(op.getArity() == 2) {
+                else if (op.getArity() == 2) {
                     SyntaxTreeNode operandNode2 = nodeStack.pop();
                     SyntaxTreeNode operandNode1 = nodeStack.pop();
                     operatorNode.addChild(operandNode1);
@@ -53,15 +54,15 @@ public class SyntaxTreeConstructor {
                 Function f = (Function) el;
                 SyntaxTreeNode functionNode = new SyntaxTreeNode(f);
                 int arity = f.getArity();
-                for (int i = arity - 1; i >= 0; i++) {
+                for (int i = arity - 1; i >= 0; i--) {
                     functionNode.addChild(nodeStack.pop());
                 }
-                nodeStack.push(functionNode);            
+                nodeStack.push(functionNode);
             }
         }
 
         // Construction failed if more than one item is left in node stack
-        if(nodeStack.size() > 1) {
+        if (nodeStack.size() > 1) {
             throw new RuntimeException("More than one item left in node stack");
         }
 

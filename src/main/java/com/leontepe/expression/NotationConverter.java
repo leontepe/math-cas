@@ -52,7 +52,7 @@ public class NotationConverter {
                 }
                 else if (par == Parenthesis.RIGHT_PARENTHESIS) {
                     while (!operatorStack.isEmpty() && operatorStack.peek() != Parenthesis.LEFT_PARENTHESIS) {
-                        postfix.add(((Operator) operatorStack.pop()));
+                        postfix.add((operatorStack.pop()));
                     }
                     // Pop left parenthesis into oblivion
                     operatorStack.pop();

@@ -5,6 +5,9 @@ import static org.junit.Assert.assertEquals;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.leontepe.function.LogarithmicFunction;
+import com.leontepe.function.TrigonometricFunction;
+
 import org.junit.Test;
 
 public class SyntaxTreeConstructionTest {
@@ -355,5 +358,91 @@ public class SyntaxTreeConstructionTest {
             }
         }
         assertEquals(expected9, actual9);
+    }
+
+    @Test
+    public void testPredefinedFunctionExpressions() {
+        String exString1 = "3+cos(4)*lg(2+ln(3))";
+        List<ExpressionElement> postfix1 = new ArrayList<ExpressionElement>();
+        postfix1.add(new Number(3));
+        postfix1.add(new Number(4));
+        postfix1.add(TrigonometricFunction.COSINE);
+        postfix1.add(new Number(2));
+        postfix1.add(new Number(3));
+        postfix1.add(LogarithmicFunction.NATURAL_LOGARITHM);
+        postfix1.add(Operator.ADD);
+        postfix1.add(LogarithmicFunction.COMMON_LOGARITHM);
+        postfix1.add(Operator.MULTIPLY);
+        postfix1.add(Operator.ADD);
+        SyntaxTreeNode actual1 = SyntaxTreeConstructor.construct(postfix1);
+        SyntaxTreeNode expected1 = new SyntaxTreeNode(Operator.ADD);
+        {
+            SyntaxTreeNode n0 = expected1.addChild(new Number(3));
+            SyntaxTreeNode n1 = expected1.addChild(Operator.MULTIPLY);
+            {
+                SyntaxTreeNode n10 = n1.addChild(TrigonometricFunction.COSINE);
+                {
+                    SyntaxTreeNode n100 = n10.addChild(new Number(4));
+                }
+                SyntaxTreeNode n11 = n1.addChild(LogarithmicFunction.COMMON_LOGARITHM);
+                {
+                    SyntaxTreeNode n110 = n11.addChild(Operator.ADD);
+                    {
+                        SyntaxTreeNode n1100 = n110.addChild(new Number(2));
+                        SyntaxTreeNode n1101 = n110.addChild(LogarithmicFunction.NATURAL_LOGARITHM);
+                        {
+                            SyntaxTreeNode n11010 = n1101.addChild(new Number(3));
+                        }
+                    }
+                }
+            }
+        }
+        assertEquals(expected1, actual1);
+    }
+
+    @Test
+    public void testConstantExpressions() {
+        String exString1 = "3*x-(4*e)/y+2*π";
+        List<ExpressionElement> postfix1 = new ArrayList<ExpressionElement>();
+        postfix1.add(new Number(3));
+        postfix1.add(new Variable('x'));
+        postfix1.add(Operator.MULTIPLY);
+        postfix1.add(new Number(4));
+        postfix1.add(Constant.E);
+        postfix1.add(Operator.MULTIPLY);
+        postfix1.add(new Variable('y'));
+        postfix1.add(Operator.DIVIDE);
+        postfix1.add(Operator.SUBTRACT);
+        postfix1.add(new Number(2));
+        postfix1.add(Constant.PI);
+        postfix1.add(Operator.MULTIPLY);
+        postfix1.add(Operator.ADD);
+        SyntaxTreeNode actual1 = SyntaxTreeConstructor.construct(postfix1);
+        SyntaxTreeNode expected1 = new SyntaxTreeNode(Operator.ADD);
+        {
+            SyntaxTreeNode n0 = expected1.addChild(Operator.SUBTRACT);
+            {
+                SyntaxTreeNode n00 = n0.addChild(Operator.MULTIPLY);
+                {
+                    SyntaxTreeNode n000 = n00.addChild(new Number(3));
+                    SyntaxTreeNode n001 = n00.addChild(new Variable('x'));
+                }
+                SyntaxTreeNode n01 = n0.addChild(Operator.DIVIDE);
+                {
+                    SyntaxTreeNode n010 = n01.addChild(Operator.MULTIPLY);
+                    {
+                        SyntaxTreeNode n0100 = n010.addChild(new Number(4));
+                        SyntaxTreeNode n0101 = n010.addChild(Constant.E);
+                    }
+                    SyntaxTreeNode n011 = n01.addChild(new Variable('y'));
+                }
+            }
+            SyntaxTreeNode n1 = expected1.addChild(Operator.MULTIPLY);
+            {
+                SyntaxTreeNode n10 = n1.addChild(new Number(2));
+                SyntaxTreeNode n11 = n1.addChild(Constant.PI);
+            }
+        }
+        assertEquals(expected1, actual1);
     }
 }

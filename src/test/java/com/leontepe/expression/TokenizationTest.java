@@ -328,6 +328,18 @@ public class TokenizationTest {
         expected3.add(Operator.MULTIPLY);
         expected3.add(Constant.E);
         assertEquals(expected3, actual3);
+
+        String exString4 = "2*π-π^2";
+        List<ExpressionElement> actual4 = ExpressionTokenizer.tokenize(exString4);
+        List<ExpressionElement> expected4 = new ArrayList<ExpressionElement>();
+        expected4.add(new Number(2));
+        expected4.add(Operator.MULTIPLY);
+        expected4.add(Constant.PI);
+        expected4.add(Operator.SUBTRACT);
+        expected4.add(Constant.PI);
+        expected4.add(Operator.EXPONENTIATE);
+        expected4.add(new Number(2));
+        assertEquals(expected4, actual4);
     }
 
     @Test

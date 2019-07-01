@@ -518,5 +518,76 @@ public class InfixToPostfixTest {
         postfix4.add(LogarithmicFunction.NATURAL_LOGARITHM);
         postfix4.add(TrigonometricFunction.ARCSINE);
         assertEquals(NotationConverter.infixToPostfix(infix4), postfix4);
+
+        String exString5 = "3+cos(4)*lg(2+ln(3))";
+        List<ExpressionElement> infix5 = new ArrayList<ExpressionElement>();
+        infix5.add(new Number(3));
+        infix5.add(Operator.ADD);
+        infix5.add(TrigonometricFunction.COSINE);
+        infix5.add(Parenthesis.LEFT_PARENTHESIS);
+        infix5.add(new Number(4));
+        infix5.add(Parenthesis.RIGHT_PARENTHESIS);
+        infix5.add(Operator.MULTIPLY);
+        infix5.add(LogarithmicFunction.COMMON_LOGARITHM);
+        infix5.add(Parenthesis.LEFT_PARENTHESIS);
+        infix5.add(new Number(2));
+        infix5.add(Operator.ADD);
+        infix5.add(LogarithmicFunction.NATURAL_LOGARITHM);
+        infix5.add(Parenthesis.LEFT_PARENTHESIS);
+        infix5.add(new Number(3));
+        infix5.add(Parenthesis.RIGHT_PARENTHESIS);
+        infix5.add(Parenthesis.RIGHT_PARENTHESIS);
+        List<ExpressionElement> actual5 = NotationConverter.infixToPostfix(infix5);
+        List<ExpressionElement> expected5 = new ArrayList<ExpressionElement>();
+        expected5.add(new Number(3));
+        expected5.add(new Number(4));
+        expected5.add(TrigonometricFunction.COSINE);
+        expected5.add(new Number(2));
+        expected5.add(new Number(3));
+        expected5.add(LogarithmicFunction.NATURAL_LOGARITHM);
+        expected5.add(Operator.ADD);
+        expected5.add(LogarithmicFunction.COMMON_LOGARITHM);
+        expected5.add(Operator.MULTIPLY);
+        expected5.add(Operator.ADD);
+        assertEquals(expected5, actual5);
     }
+
+    @Test
+    public void testConstantExpressions() {
+        String exString1 = "3*x-(4*e)/y+2*π";
+        List<ExpressionElement> infix1 = new ArrayList<ExpressionElement>();
+        infix1.add(new Number(3));
+        infix1.add(Operator.MULTIPLY);
+        infix1.add(new Variable('x'));
+        infix1.add(Operator.SUBTRACT);
+        infix1.add(Parenthesis.LEFT_PARENTHESIS);
+        infix1.add(new Number(4));
+        infix1.add(Operator.MULTIPLY);
+        infix1.add(Constant.E);
+        infix1.add(Parenthesis.RIGHT_PARENTHESIS);
+        infix1.add(Operator.DIVIDE);
+        infix1.add(new Variable('y'));
+        infix1.add(Operator.ADD);
+        infix1.add(new Number(2));
+        infix1.add(Operator.MULTIPLY);
+        infix1.add(Constant.PI);
+        List<ExpressionElement> actual1 = NotationConverter.infixToPostfix(infix1);
+        List<ExpressionElement> expected1 = new ArrayList<ExpressionElement>();
+        expected1.add(new Number(3));
+        expected1.add(new Variable('x'));
+        expected1.add(Operator.MULTIPLY);
+        expected1.add(new Number(4));
+        expected1.add(Constant.E);
+        expected1.add(Operator.MULTIPLY);
+        expected1.add(new Variable('y'));
+        expected1.add(Operator.DIVIDE);
+        expected1.add(Operator.SUBTRACT);
+        expected1.add(new Number(2));
+        expected1.add(Constant.PI);
+        expected1.add(Operator.MULTIPLY);
+        expected1.add(Operator.ADD);
+        assertEquals(expected1, actual1);
+    }
+
+
 }

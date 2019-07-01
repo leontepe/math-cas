@@ -129,6 +129,14 @@ public class Expression extends ExpressionElement {
         return false;
     }
 
+    public SyntaxTreeNode constructSyntaxTree() {
+        return SyntaxTreeConstructor.construct(NotationConverter.infixToPostfix(expressionElements));
+    }
+
+    public void printSyntaxTree() {
+        constructSyntaxTree().print();
+    }
+
 
     // this should technically have a binary syntax tree as input, so assume it is binary
     private static void equalize(SyntaxTreeNode node) {

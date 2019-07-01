@@ -9,14 +9,14 @@ AGENDA:
 	[x] 5. Variablen
 	[x] 6. Vordefinierte Funktionen (zB. trig.: sin, cos)
 	[x] 7. Vordefinierte Konstanten (z.B. pi, e)
-	[.] 9. Fakultät
+	[x] 9. Fakultät
 	[ ] 10. Griechische Buchstaben/Variablen
 
 	Zusammen: 
 	[ ] 11. Implizite Multiplikation (kontextabhängig)
 	[ ] 12. eigendefinierte Funktionen (f(x) = ...)
 
-- [In ein paar Wochen] Funktionen einbauen:
+- Funktionen/Analysis:
 	- 2D-Graph
 	- Nullstellen berechnen
 	- Ableitung bilden (+ Ableitungsregeln)
@@ -26,7 +26,7 @@ AGENDA:
 	- Notwendige / hinreichende Kriterien
 	- Integrale ausrechnen
 
-- Vektorrechnung
+- Vektorrechnung/-geometrie
 	- Rechenarten
 	- Ebenen
 	- Parameterdarstellung
