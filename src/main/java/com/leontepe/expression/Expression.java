@@ -8,29 +8,33 @@ import com.leontepe.expression.Operator.BinaryOperator;
 import com.leontepe.expression.Operator.UnaryOperator;
 import com.leontepe.function.Function;
 import com.leontepe.MathContext;
-import com.leontepe.exception.EvaluationException;
-import com.leontepe.exception.ExpressionParsingException;
+import com.leontepe.exception.*;
 
 public class Expression extends ExpressionElement {
-    
+
     // private SyntaxTreeNode syntaxTreeRoot;
 
     // public Expression(String expressionString) {
-    //     List<ExpressionElement> infix = ExpressionTokenizer.tokenize(expressionString);
-    //     List<ExpressionElement> postfix = NotationConverter.infixToPostfix(infix);
-    //     this.syntaxTreeRoot = SyntaxTreeConstructor.construct(postfix);
+    // List<ExpressionElement> infix =
+    // ExpressionTokenizer.tokenize(expressionString);
+    // List<ExpressionElement> postfix = NotationConverter.infixToPostfix(infix);
+    // this.syntaxTreeRoot = SyntaxTreeConstructor.construct(postfix);
     // }
-    
+
     // public SyntaxTreeNode getSyntaxTree() { return this.syntaxTreeRoot.clone(); }
 
     private List<ExpressionElement> expressionElements;
 
-    public Expression(String expressionString) {
-        this.expressionElements = ExpressionTokenizer.tokenize(expressionString);
+    public Expression(String expressionString) throws InvalidSyntaxException, AmbiguousSyntaxException, NotImplementedException {
+        this(new MathContext(), expressionString);
     }
 
-    public Expression(MathContext context, String expressionString) {
-        this.expressionElements = ExpressionTokenizer.tokenize(context, expressionString);
+    public Expression(MathContext context, String expressionString) throws InvalidSyntaxException, AmbiguousSyntaxException, NotImplementedException {
+        this.expressionElements = ExpressionTokenizer.tokenize(expressionString, context);
+    }
+
+    public Expression(List<ExpressionElement> expressionElements) {
+        this.expressionElements = expressionElements;
     }
 
     public List<ExpressionElement> getExpressionElements() {
@@ -40,7 +44,7 @@ public class Expression extends ExpressionElement {
     @Override
     public String toString() {
         String expressionString = "";
-        for(ExpressionElement el : expressionElements) {
+        for (ExpressionElement el : expressionElements) {
             expressionString += el.toString();
         }
         return expressionString;
@@ -122,8 +126,8 @@ public class Expression extends ExpressionElement {
 
     @Override
     public boolean equals(Object obj) {
-        if(obj instanceof Expression) {
-            Expression ex = (Expression)obj;
+        if (obj instanceof Expression) {
+            Expression ex = (Expression) obj;
             return expressionElements.equals(ex.getExpressionElements());
         }
         return false;
@@ -137,28 +141,49 @@ public class Expression extends ExpressionElement {
         constructSyntaxTree().print();
     }
 
+    public boolean isFunctionLeftSide() {
+        // f(x), g(x), f(t) = ...
+        if (expressionElements.size() == 4) {
+            if (expressionElements.get(0) instanceof Function
+                    && expressionElements.get(1) == Parenthesis.LEFT_PARENTHESIS
+                    && expressionElements.get(2) instanceof Variable
+                    && !((Variable)expressionElements.get(2)).hasValue()
+                    && expressionElements.get(3) == Parenthesis.RIGHT_PARENTHESIS) {
+                return true;
+            }
+        }
+        // y = ...
+        // else if (expressionElements.size() == 1) {
+        // if (expressionElements.get(0) instanceof Variable &&
+        // !(expressionElements.get(0) instanceof Constant)) {
+        // return true;
+        // }
+        // }
 
-    // this should technically have a binary syntax tree as input, so assume it is binary
-    private static void equalize(SyntaxTreeNode node) {
-
+        return false;
     }
 
-    private static SyntaxTreeNode transformNegatives(SyntaxTreeNode node) {
-        if()
-    }
-    
-    private static SyntaxTreeNode levelOperators() {
-        
-    }
+    // this should technically have a binary syntax tree as input, so assume it is
+    // binary
+    // private static void equalize(SyntaxTreeNode node) {
 
-    private static SyntaxTreeNode simplifyRationals() {
-        
-    }
+    // }
+
+    // private static SyntaxTreeNode transformNegatives(SyntaxTreeNode node) {
+    // if()
+    // }
+
+    // private static SyntaxTreeNode levelOperators() {
+
+    // }
+
+    // private static SyntaxTreeNode simplifyRationals() {
+
+    // }
 
     // public Expression substitute(Variable variable, Number number);
     // public List<Expression> getSummands();
     // public boolean contains(ExpressionElement el);
     // public boolean containsParantheses();
-    
 
 }

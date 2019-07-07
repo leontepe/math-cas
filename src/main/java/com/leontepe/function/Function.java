@@ -5,7 +5,7 @@ import com.leontepe.exception.FunctionException;
 import com.leontepe.expression.*;
 import com.leontepe.expression.Number;
 
-public abstract class Function extends ExpressionElement {
+public class Function extends ExpressionElement {
 
     private String functionName;
     private Expression functionExpression;
@@ -29,8 +29,12 @@ public abstract class Function extends ExpressionElement {
     /**
      * Gets expression defining this function. Optional, as not every function can be represented as an expression (e.g. trig. functions)
      */
-    public Expression getFunctionExpression() {
+    public Expression getDefinition() {
         return functionExpression;
+    }
+
+    public void setDefinition(Expression expression) {
+        this.functionExpression = expression;
     }
 
     /**

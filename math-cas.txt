@@ -10,11 +10,13 @@ AGENDA:
 	[x] 6. Vordefinierte Funktionen (zB. trig.: sin, cos)
 	[x] 7. Vordefinierte Konstanten (z.B. pi, e)
 	[x] 9. Fakultät
-	[ ] 10. Griechische Buchstaben/Variablen
 
-	Zusammen: 
-	[ ] 11. Implizite Multiplikation (kontextabhängig)
-	[ ] 12. eigendefinierte Funktionen (f(x) = ...)
+	Zusammen:
+	[.] 10. Implizite Multiplikation (über math. Kontext)
+	[.] 11. eigendefinierte Funktionen (f(x) = ...)
+	[.] 12. Rückmeldung über Syntaxfehler (d.h. Exceptions einbauen)
+
+	[ ] 13. Griechische Buchstaben/Variablen
 
 - Funktionen/Analysis:
 	- 2D-Graph
@@ -105,3 +107,45 @@ reden, der "vordefinierte" Funktionen wie die trigonometrischen (sin, cos etc.) 
 erstelle Kontexte erben, sofern sie nicht aus irgendeinem Grund Funktionsbeschreiber wie "sin" neu definieren wollen (was aufgrund der mehreren Buchstaben erst einmal gar nicht
 möglich sein soll). Dieser mathematische Kontext ist dann das grundlegendste Objekt. Bevor man ein Gleichung oder einen Ausdruck erstellen kann, muss erst der mathematische Kontext
 dafür gegeben sein.
+
+Der mathematische Kontext verbindet sozusagen die verschiedenen Gleichungen. Wenn zum Beispiel in "Zeile" bzw. Gleichung 1 die Funktion f definiert wird, um sie dann in der
+zweiten Gleichung abzuleiten, müssen f und f' auf die gleiche Funktion zeigen. Und diese Verbindung wird durch den mathematischen Kontext hergestellt.
+
+--PROBLEM MATHEMATISCHER KONTEXT--
+Die Grundlagen wurden jetzt soweit umgesetzt, allerdings muss zum richtigen implementieren von Funktionen jetzt der MathContext implementiert werden. Über den mathematischen Kontext
+werden die Eingaben erst zugelassen, da er die Informationen hat, die zum richtigen Parsen benötigt werden. Somit brauch der MathContext eine Funktion zum Hinzufügen von Gleichungen,
+beispielsweise zum Definieren von Funktionen.
+
+f(x) = x^2+4
+g(x) = 2*f(x) - 12
+
+Soll es möglich sein, Funktionsdefinitionen andersherum zu schreiben (Beispiel: 14*y+3 = h(y))?
+Es wäre gut, wenn das möglich ist, da es algebraisch und mathematisch nun mal möglich ist, es so zu notieren, auch wenn es unüblich ist. Aber mein CAS soll standfest und so generell
+wie möglich sein. Deswegen will ich auch das ermöglichen.
+==> x^2 = f(x) <-- JA
+
+Was ist mit mehreren Gleichheitszeichen in einer "Gleichungszelle"?
+Mir fallen im Moment keine Beispiele ein, wo es wirklich sinnvoll wäre, mehrere Gleichheitszeichen zu verwenden. Man kann zwar verkettete Gleichungen machen, also z.B.
+f(x)	= 3x(x^2-2)
+		= 3x*x^2+3x*(-2)
+		= 3x^3 - 6x,
+allerdings könnten die Ausdrücke in diesem Beispiel auch als mehrere Gleichungen angesehen werden. Andererseits könnte man eine Gleichung auch aus mehreren Ausdrücken bestehen
+lassen. So wären bei der Gleichung oben 4 Ausdrücke in einem Gleichungsobjekt, was es leicht machen würde, festzustellen, ob einer dem anderen gleicht.
+
+sobald irgendwo f(x) oder g(x) oder z(x) oder c(b) steht, wird beim Parsen angenommen, dass es eine Funktion ist. Es gibt keinen triftigen Grund, falls eine Multiplikation gemeint ist,
+es so aufzuschreiben. Falls doch ist der Nutzer eben dazu gezwungen, es selbst entweder explizit zu schreiben oder einfach die Klammer aufzulösen (also "ab" statt "a(b)")
+
+Sonntag, 7.7.2019:
+Im Moment gibt es nur zwei Funktionen, die ich implementiert haben will, wenn ich die Punkte 10, 11 und 12 abgeschlossen habe:
+
+1. Funktionen definieren:
+f(x)=x^2
+g(x)=sin(x)/13
+b(z)=sin(z)*(1/10)+lg(z^2)
+
+2. Funktionswerte ausrechnen:
+f(3)= ... =9
+b(π)= ...
+
+3. Terme ausrechnen:
+sin(3)+lg(12)/12-10= ...
